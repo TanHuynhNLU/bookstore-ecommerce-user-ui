@@ -5,4 +5,15 @@
 :root {
     --main-color: #228b22;
     --text-color: #333;
+    --header-height: 90px;
+    --bg-overlay: rgba(0, 0, 0, 0.5);
+}
+
+.mobile-menu {
+    transition: transform 0.5s cubic-bezier(0.645, 0.045, 0.355, 1);
+    transform: translateX(-100%);
+}
+
+.mobile-menu.current {
+    transform: translateX(0);
 }
