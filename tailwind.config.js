@@ -12,6 +12,9 @@ module.exports = {
             maxHeight: {
                 'items-cart-header': 'calc(50vh - 138px)',
             },
+            backgroundImage: {
+                banner: "url('../public/images/bg-banner.jpg')",
+            },
         },
     },
     plugins: [],

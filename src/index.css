@@ -17,3 +17,8 @@
 .mobile-menu.current {
     transform: translateX(0);
 }
+
+.mySwiper .swiper-button-prev,
+.mySwiper .swiper-button-next {
+    color: var(--main-color);
+}

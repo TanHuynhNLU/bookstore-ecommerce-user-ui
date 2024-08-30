@@ -15,10 +15,10 @@ function Header() {
     const [showMobileMenu, setShowMobileMenu] = useState(false);
 
     return (
-        <header className="fixed top-0 z-10 flex h-[--header-height] w-full items-center justify-center border-b-[2px] border-solid border-[--main-color] text-[--text-color]">
+        <header className="fixed top-0 z-10 flex h-[--header-height] w-full items-center justify-center border-b-[2px] border-solid border-[--main-color] bg-white text-[--text-color]">
             <div className="flex h-full w-full max-w-7xl flex-row items-center justify-between px-3">
-                <div className="flex h-full w-[80px] items-center">
-                    <div className="h-[40px] w-[40px] p-1 lg:hidden" onClick={() => setShowMobileMenu(true)}>
+                <div className="flex h-full w-[80px] items-center lg:hidden">
+                    <div className="h-[40px] w-[40px] p-1" onClick={() => setShowMobileMenu(true)}>
                         <Bars3Icon className="inline-block h-[36px] w-[36px] text-[--main-color]" />
                     </div>
                 </div>
@@ -206,7 +206,7 @@ function MobileMenu({ isShow, onClose }) {
     return (
         <div>
             <div
-                className={`fixed bottom-0 left-0 right-0 top-0 h-full w-full ${isShow ? 'z-40 bg-[--bg-overlay]' : '-z-10 bg-none'}`}
+                className={`fixed bottom-0 left-0 right-0 top-0 h-full w-full ${isShow ? 'visible z-40 bg-[--bg-overlay]' : 'invisible -z-10 bg-none'}`}
                 onClick={onClose}
             ></div>
             <div
@@ -237,7 +237,7 @@ function MobileMenu({ isShow, onClose }) {
                         </a>
                     </li>
                     <li>
-                        <a className="inline-flex w-full flex-col px-2 font-bold" href="#">
+                        <span className="inline-flex w-full flex-col px-2 font-bold" href="#">
                             <div className="flex justify-between py-2 hover:text-[--main-color]">
                                 <span>Sản Phẩm</span>
                                 <span
@@ -274,7 +274,7 @@ function MobileMenu({ isShow, onClose }) {
                                     </a>
                                 </li>
                             </ul>
-                        </a>
+                        </span>
                     </li>
                     <li className="hover:text-[--main-color]">
                         <a className="inline-block w-full p-2 font-bold" href="#">
