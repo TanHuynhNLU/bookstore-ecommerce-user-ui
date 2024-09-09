@@ -131,7 +131,7 @@ function Home() {
             <section className="flex items-center justify-center py-6">
                 <div className="w-full max-w-7xl px-2">
                     <div className="mb-6 flex items-center justify-between border-t-2 border-solid border-[--main-color] pt-3 ">
-                        <h2 className="text-3xl font-bold text-[--main-color]">Sách bán chạy</h2>
+                        <h2 className="text-3xl font-bold text-[--main-color]">Bán chạy</h2>
                         <a className="inline-block font-bold text-[--main-color]" href="#">
                             Xem thêm <ArrowRightCircleIcon className="inline-block h-8 w-8" />
                         </a>

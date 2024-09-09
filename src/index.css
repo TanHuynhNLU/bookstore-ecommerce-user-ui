@@ -21,4 +21,5 @@
 .mySwiper .swiper-button-prev,
 .mySwiper .swiper-button-next {
     color: var(--main-color);
+    transform: translateY(-40px);
 }
