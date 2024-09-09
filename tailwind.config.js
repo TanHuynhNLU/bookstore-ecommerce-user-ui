@@ -12,6 +12,10 @@ module.exports = {
             maxHeight: {
                 'items-cart-header': 'calc(50vh - 138px)',
             },
+            width: {
+                'item-prod-home-ssm': 'calc((100vw - 16px)/2)!important',
+                'item-prod-home-sm': 'calc((100vw - 16px)/3)!important',
+            },
             backgroundImage: {
                 banner: "url('../public/images/bg-banner.jpg')",
             },
