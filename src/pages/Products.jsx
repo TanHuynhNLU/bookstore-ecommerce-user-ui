@@ -20,27 +20,27 @@ function Products() {
                 </div>
             </div>
             <div className="flex items-center justify-center">
-                <div className="my-3 flex w-full max-w-7xl space-x-2">
-                    <div className="w-1/4 p-2 shadow-md">
+                <div className="my-3 flex w-full max-w-7xl flex-col px-2 md:flex-row md:space-x-2">
+                    <div className="mb-8 w-full p-2 shadow-md md:mb-0 md:w-1/4">
                         <div className="border-b-2 border-solid border-gray-200 py-2">
                             <h5 className="font-bold">NHÓM SẢN PHẨM</h5>
                             <ul>
-                                <li className="py-1 font-bold text-[--main-color] hover:font-bold hover:text-[--main-color]">
+                                <li className="py-1 font-bold text-[--main-color] hover:text-[--main-color]">
                                     <a href="#">Tất Cả Sản Phẩm</a>
                                 </li>
-                                <li className="py-1 hover:font-bold hover:text-[--main-color]">
+                                <li className="py-1 hover:text-[--main-color]">
                                     <a href="#">Kỹ Năng Sống</a>
                                 </li>
-                                <li className="py-1 hover:font-bold hover:text-[--main-color]">
+                                <li className="py-1 hover:text-[--main-color]">
                                     <a href="#">Kinh Tế</a>
                                 </li>
-                                <li className="py-1 hover:font-bold hover:text-[--main-color]">
+                                <li className="py-1 hover:text-[--main-color]">
                                     <a href="#">Kinh Điển</a>
                                 </li>
-                                <li className="py-1 hover:font-bold hover:text-[--main-color]">
+                                <li className="py-1 hover:text-[--main-color]">
                                     <a href="#">Tiểu Thuyết</a>
                                 </li>
-                                <li className="py-1 hover:font-bold hover:text-[--main-color]">
+                                <li className="py-1 hover:text-[--main-color]">
                                     <a href="#">Manga</a>
                                 </li>
                             </ul>
@@ -198,27 +198,42 @@ function Products() {
                             </div>
                         </div>
                     </div>
-                    <div className="w-3/4">
-                        <div className="mb-10 flex items-center justify-end bg-[#f5f5f5] p-3">
-                            <div className="flex">
+                    <div className="w-full md:w-3/4">
+                        <div className="group/sort relative mb-10 flex items-center bg-[#f5f5f5] p-3 md:justify-end">
+                            <div className=" flex">
                                 <Square3Stack3DIcon className="inline-block h-6 w-6 text-gray-400" />
                                 <span className="ml-2 text-[#2E3A59]">Sắp xếp theo</span>
+                                <span className="ml-2 text-[--main-color] md:hidden">Mặc định</span>
                             </div>
-                            <button className="ml-2 rounded-md bg-white p-2 text-[#2E3A59] hover:bg-[#7B7B7D] hover:text-white">
-                                Mặc định
-                            </button>
-                            <button className="ml-2 rounded-md bg-white p-2 text-[#2E3A59] hover:bg-[#7B7B7D] hover:text-white">
-                                Sách mới
-                            </button>
-                            <button className="ml-2 rounded-md bg-white p-2 text-[#2E3A59] hover:bg-[#7B7B7D] hover:text-white">
-                                Giá thấp - cao
-                            </button>
-                            <button className="ml-2 rounded-md bg-white p-2 text-[#2E3A59] hover:bg-[#7B7B7D] hover:text-white">
-                                Giá cao - thấp
-                            </button>
+                            <div className="hidden md:flex">
+                                <button className="ml-2 rounded-md bg-[#7B7B7D] p-2 text-white">Mặc định</button>
+                                <button className="ml-2 rounded-md bg-white p-2 text-[#2E3A59] hover:bg-[#7B7B7D] hover:text-white">
+                                    Sách mới
+                                </button>
+                                <button className="ml-2 rounded-md bg-white p-2 text-[#2E3A59] hover:bg-[#7B7B7D] hover:text-white">
+                                    Giá thấp - cao
+                                </button>
+                                <button className="ml-2 rounded-md bg-white p-2 text-[#2E3A59] hover:bg-[#7B7B7D] hover:text-white">
+                                    Giá cao - thấp
+                                </button>
+                            </div>
+                            <ul className="absolute top-full z-[1] hidden w-[210px] overflow-hidden rounded-md border border-solid border-gray-200 bg-white shadow-md group-hover/sort:block group-hover/sort:md:hidden">
+                                <li className="h-8 cursor-pointer rounded-md px-2 hover:bg-[#7B7B7D] hover:text-white">
+                                    Mặc định
+                                </li>
+                                <li className="h-8 cursor-pointer rounded-md px-2 hover:bg-[#7B7B7D] hover:text-white">
+                                    Sách mới
+                                </li>
+                                <li className="h-8 cursor-pointer rounded-md px-2 hover:bg-[#7B7B7D] hover:text-white">
+                                    Giá thấp - cao
+                                </li>
+                                <li className="h-8 cursor-pointer rounded-md px-2 hover:bg-[#7B7B7D] hover:text-white">
+                                    Giá cao - thấp
+                                </li>
+                            </ul>
                         </div>
                         <div className="flex flex-wrap">
-                            <div className="inline-flex w-1/4 flex-col items-center px-2 py-2 hover:shadow-md">
+                            <div className="inline-flex w-1/2 flex-col items-center px-2 py-2 hover:shadow-md md:w-1/4">
                                 <a href="#" className="group/product-image relative inline-block overflow-hidden">
                                     <img
                                         src={BookImage}
@@ -243,7 +258,7 @@ function Products() {
                                     <span className="text-center font-bold text-[--main-color]">89.000đ</span>
                                 </div>
                             </div>
-                            <div className="inline-flex w-1/4 flex-col items-center px-2 py-2 hover:shadow-md">
+                            <div className="inline-flex w-1/2 flex-col items-center px-2 py-2 hover:shadow-md md:w-1/4">
                                 <a href="#" className="group/product-image relative inline-block overflow-hidden">
                                     <img
                                         src={BookImage}
@@ -268,7 +283,7 @@ function Products() {
                                     <span className="text-center font-bold text-[--main-color]">89.000đ</span>
                                 </div>
                             </div>
-                            <div className="inline-flex w-1/4 flex-col items-center px-2 py-2 hover:shadow-md">
+                            <div className="inline-flex w-1/2 flex-col items-center px-2 py-2 hover:shadow-md md:w-1/4">
                                 <a href="#" className="group/product-image relative inline-block overflow-hidden">
                                     <img
                                         src={BookImage}
@@ -293,7 +308,7 @@ function Products() {
                                     <span className="text-center font-bold text-[--main-color]">89.000đ</span>
                                 </div>
                             </div>
-                            <div className="inline-flex w-1/4 flex-col items-center px-2 py-2 hover:shadow-md">
+                            <div className="inline-flex w-1/2 flex-col items-center px-2 py-2 hover:shadow-md md:w-1/4">
                                 <a href="#" className="group/product-image relative inline-block overflow-hidden">
                                     <img
                                         src={BookImage}
@@ -318,7 +333,7 @@ function Products() {
                                     <span className="text-center font-bold text-[--main-color]">89.000đ</span>
                                 </div>
                             </div>
-                            <div className="inline-flex w-1/4 flex-col items-center px-2 py-2 hover:shadow-md ">
+                            <div className="inline-flex w-1/2 flex-col items-center px-2 py-2 hover:shadow-md md:w-1/4 ">
                                 <a href="#" className="group/product-image relative inline-block overflow-hidden">
                                     <img
                                         src={BookImage}
