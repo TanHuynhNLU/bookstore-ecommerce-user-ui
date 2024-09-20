@@ -18,7 +18,7 @@ function Footer() {
                             <span className="mr-2">
                                 <MapPinIcon className="inline-block h-6 w-6 text-[--main-color]" />
                             </span>
-                            <p>Số 123, Phường 123, Quận 567, TP.HCM</p>
+                            <p>Số 123, Phường 456, Quận 789, TP.HCM</p>
                         </li>
                         <li className="flex items-center py-1">
                             <span className="mr-2">

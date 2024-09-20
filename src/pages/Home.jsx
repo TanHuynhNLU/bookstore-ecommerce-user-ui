@@ -10,7 +10,7 @@ import Banner3 from '~/assets/imgs/banner3.jpg';
 import Banner4 from '~/assets/imgs/banner4.jpg';
 import BookImage from '~/assets/imgs/nha-gia-kim.jpg';
 
-import { Autoplay, Pagination, Navigation } from 'swiper/modules';
+import { Autoplay, Navigation } from 'swiper/modules';
 import { ArrowRightCircleIcon, ShoppingCartIcon } from '@heroicons/react/24/outline';
 
 function Home() {
@@ -131,8 +131,10 @@ function Home() {
             <section className="flex items-center justify-center py-6">
                 <div className="w-full max-w-7xl px-2">
                     <div className="mb-6 flex items-center justify-between border-t-2 border-solid border-[--main-color] pt-3 ">
-                        <h2 className="text-3xl font-bold text-[--main-color]">Bán chạy</h2>
-                        <a className="inline-block font-bold text-[--main-color]" href="#">
+                        <h2 className="text-xl font-bold text-[--main-color] md:text-2xl">
+                            <a href="#">Bán chạy</a>
+                        </h2>
+                        <a className="hidden font-bold text-[--main-color] md:inline-block" href="#">
                             Xem thêm <ArrowRightCircleIcon className="inline-block h-8 w-8" />
                         </a>
                     </div>
@@ -350,8 +352,10 @@ function Home() {
             <section className="flex items-center justify-center py-6">
                 <div className="w-full max-w-7xl px-2">
                     <div className="mb-6 flex items-center justify-between border-t-2 border-solid border-[--main-color] pt-3 ">
-                        <h2 className="text-3xl font-bold text-[--main-color]">Sách mới</h2>
-                        <a className="inline-block font-bold text-[--main-color]" href="#">
+                        <h2 className="text-xl font-bold text-[--main-color] md:text-2xl">
+                            <a href="#">Sách mới</a>
+                        </h2>
+                        <a className="hidden font-bold text-[--main-color] md:inline-block" href="#">
                             Xem thêm <ArrowRightCircleIcon className="inline-block h-8 w-8" />
                         </a>
                     </div>
