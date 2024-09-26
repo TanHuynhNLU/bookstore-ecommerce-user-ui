@@ -10,6 +10,7 @@ import {
 import ProductImage from '~/assets/imgs/nha-gia-kim.jpg';
 import Logo from '~/assets/imgs/logo.png';
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 function Header() {
     const [showMobileMenu, setShowMobileMenu] = useState(false);
@@ -23,31 +24,31 @@ function Header() {
                     </div>
                 </div>
                 <div className="h-full w-[130px] px-2">
-                    <a className="flex h-full w-full items-center justify-center lg:justify-start" href="#">
+                    <Link to="/" className="flex h-full w-full items-center justify-center lg:justify-start">
                         <img src={Logo} alt="logo" className="inline-block h-[72px] w-[72px]" />
-                    </a>
+                    </Link>
                 </div>
                 <ul className="hidden h-full lg:flex">
                     <li className="h-full px-4 hover:text-[--main-color]">
-                        <a className="inline-block inline-flex h-full items-center justify-center font-bold" href="#">
+                        <Link to="/" className=" inline-flex h-full items-center justify-center font-bold">
                             Trang Chủ
-                        </a>
+                        </Link>
                     </li>
                     <li className="h-full px-4 hover:text-[--main-color]">
-                        <a className="inline-block inline-flex h-full items-center justify-center font-bold" href="#">
+                        <a className=" inline-flex h-full items-center justify-center font-bold" href="#">
                             Tin Sách
                         </a>
                     </li>
                     <li className="group/products relative h-full px-4">
-                        <a
-                            className="inline-block inline-flex h-full items-center justify-center font-bold hover:text-[--main-color]"
-                            href="#"
+                        <Link
+                            to="/products"
+                            className=" inline-flex h-full items-center justify-center font-bold hover:text-[--main-color]"
                         >
                             Sản Phẩm
                             <span className="ml-1 inline-flex items-center justify-center transition-transform duration-300 group-hover/products:rotate-180">
                                 <ChevronDownIcon className="inline-block h-4 w-4" />
                             </span>
-                        </a>
+                        </Link>
                         <ul className="absolute left-0 top-full hidden min-w-[200px] rounded-md bg-white shadow-nav-popup before:absolute before:-top-3 before:left-8 before:block before:h-6 before:w-6 before:rotate-45 before:bg-white group-hover/products:inline-block">
                             <li className="cursor-pointer px-4 py-2 hover:text-[--main-color]">
                                 <a className="h-full w-full" href="#">
@@ -77,9 +78,9 @@ function Header() {
                         </ul>
                     </li>
                     <li className="h-full px-4 hover:text-[--main-color]">
-                        <a className="inline-block inline-flex h-full items-center justify-center font-bold" href="#">
+                        <Link to="/contact" className=" inline-flex h-full items-center justify-center font-bold">
                             Liên Hệ
-                        </a>
+                        </Link>
                     </li>
                 </ul>
                 <div className="flex items-center">
@@ -115,10 +116,10 @@ function Header() {
                         <div className="inline-flex cursor-pointer flex-col items-center p-2 lg:hidden">
                             <MagnifyingGlassIcon className="inline-block h-6 w-6" />
                         </div>
-                        <div className="inline-flex cursor-pointer flex-col items-center p-2">
+                        <Link to="/cart" className="inline-flex cursor-pointer flex-col items-center p-2">
                             <ShoppingCartIcon className="inline-block h-6 w-6" />
                             <span className="hidden font-bold lg:inline-block">Giỏ hàng</span>
-                        </div>
+                        </Link>
                         <span className="absolute bottom-6 right-1 inline-flex h-[20px] w-[20px] items-center justify-center overflow-hidden rounded-full bg-[--main-color] p-[2px] text-center text-[12px] leading-3 text-white lg:right-4 lg:top-4">
                             1
                         </span>
@@ -188,9 +189,12 @@ function Header() {
                                     <span>Tổng cộng</span>
                                     <span className="font-bold text-[--main-color]">75.000đ</span>
                                 </div>
-                                <button className="w-[186px] shrink-0 rounded-md bg-[--main-color] px-6 py-3 font-bold text-white">
+                                <Link
+                                    to="/cart"
+                                    className="flex w-[186px] shrink-0 items-center justify-center rounded-md bg-[--main-color] px-6 py-3 font-bold text-white"
+                                >
                                     Xem giỏ hàng
-                                </button>
+                                </Link>
                             </div>
                         </div>
                     </div>
