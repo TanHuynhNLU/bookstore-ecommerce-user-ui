@@ -1,4 +1,5 @@
 import Cart from '~/pages/Cart';
+import Checkout from '~/pages/Checkout';
 import Contact from '~/pages/Contact';
 import Home from '~/pages/Home';
 import ProductDetail from '~/pages/ProductDetail';
@@ -10,4 +11,5 @@ export const routes = [
     { path: '/product-detail', component: ProductDetail },
     { path: '/contact', component: Contact },
     { path: '/cart', component: Cart },
+    { path: '/checkout', component: Checkout, layout: null },
 ];
