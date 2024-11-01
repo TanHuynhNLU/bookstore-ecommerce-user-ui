@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import Logo from '~/assets/imgs/logo.png';
 import { cities } from '~/data/AddressVn';
 import BookImage from '~/assets/imgs/nha-gia-kim.jpg';
+import { Link } from 'react-router-dom';
 function Checkout() {
     const [city, setCity] = useState();
     const [cityOptions, setCityOptions] = useState([]);
@@ -71,9 +72,9 @@ function Checkout() {
             <div className="flex w-full max-w-[1330px] flex-col-reverse lg:flex-row">
                 <div className="w-full border-solid border-gray-300 p-6 lg:h-screen lg:w-[65%] lg:border-r lg:p-3">
                     <div className="mt-3 hidden px-3 pb-5 lg:block">
-                        <a href="#">
+                        <Link to="/">
                             <img src={Logo} alt="logo" className="inline-block h-[72px] w-[72px]" />
-                        </a>
+                        </Link>
                     </div>
                     <form className="flex justify-center lg:justify-start">
                         <div className="flex w-full max-w-[560px] flex-col items-center lg:max-w-none lg:flex-row lg:items-start">
@@ -232,13 +233,13 @@ function Checkout() {
                                 <button className="w-full rounded-md bg-[--main-color] px-6 py-3 text-white hover:opacity-80">
                                     ĐẶT HÀNG
                                 </button>
-                                <a
-                                    href="#"
+                                <Link
+                                    to="/cart"
                                     className="mt-3 inline-flex items-center text-[--main-color] hover:opacity-80"
                                 >
                                     <ArrowLeftIcon className="h-4 w-4" />
                                     <span className="ml-1">Quay về giỏ hàng</span>
-                                </a>
+                                </Link>
                             </div>
                         </div>
                     </form>

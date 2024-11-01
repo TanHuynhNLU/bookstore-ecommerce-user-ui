@@ -1,4 +1,5 @@
 import { ChevronRightIcon } from '@heroicons/react/24/outline';
+import { Link } from 'react-router-dom';
 
 import BookImage from '~/assets/imgs/nha-gia-kim.jpg';
 
@@ -77,9 +78,12 @@ function Cart() {
                                         <span className="font-semibold text-[--text-color]">Tổng tiền:</span>
                                         <span className="font-bold text-[--main-color]">200.600₫</span>
                                     </div>
-                                    <button className="mt-10 flex h-[54px] w-full items-center justify-center rounded-md border border-solid border-[--main-color] bg-[--main-color] px-[6px] py-[12px] font-bold text-white hover:bg-white hover:text-[--main-color]">
+                                    <Link
+                                        to="/checkout"
+                                        className="mt-10 flex h-[54px] w-full items-center justify-center rounded-md border border-solid border-[--main-color] bg-[--main-color] px-[6px] py-[12px] font-bold text-white hover:bg-white hover:text-[--main-color]"
+                                    >
                                         Thanh toán
-                                    </button>
+                                    </Link>
                                 </div>
                             </div>
                         </div>
