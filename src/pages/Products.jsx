@@ -1,9 +1,48 @@
 import { ChevronRightIcon, ShoppingCartIcon, Square3Stack3DIcon } from '@heroicons/react/24/outline';
+import { useEffect, useState } from 'react';
 import ReactPaginate from 'react-paginate';
 
 import BookImage from '~/assets/imgs/nha-gia-kim.jpg';
+import * as productService from '~/services/ProductService';
 
 function Products() {
+    const [filters, setFilters] = useState({
+        genres: [],
+        publishers: [],
+        priceRanges: [],
+        page: 0,
+        size: 10,
+        sort: '',
+    });
+
+    const handlePriceRangeChecked = (e) => {
+        const { name, checked } = e.target;
+        if (!checked) {
+            const priceRangesFiltered = filters.priceRanges.filter((priceRange) => priceRange !== name);
+            setFilters({ ...filters, priceRanges: priceRangesFiltered });
+        } else {
+            setFilters({ ...filters, priceRanges: [...filters.priceRanges, name] });
+        }
+    };
+    const handlePublisherChecked = (e) => {
+        const { name, checked } = e.target;
+        if (!checked) {
+            const publishersFiltered = filters.publishers.filter((publisher) => publisher !== name);
+            setFilters({ ...filters, publishers: publishersFiltered });
+        } else {
+            setFilters({ ...filters, publishers: [...filters.publishers, name] });
+        }
+    };
+
+    // Fetching products from API by filter
+    useEffect(() => {
+        const fetchAPI = async () => {
+            const res = await productService.getBooksByFilter(filters);
+        };
+        fetchAPI();
+    }, [filters]);
+
+    console.log(filters);
     return (
         <div>
             <div className="flex items-center justify-center bg-banner">
@@ -25,23 +64,41 @@ function Products() {
                         <div className="border-b-2 border-solid border-gray-200 py-2">
                             <h5 className="font-bold">NHÓM SẢN PHẨM</h5>
                             <ul>
-                                <li className="py-1 font-bold text-[--main-color] hover:text-[--main-color]">
-                                    <a href="#">Tất Cả Sản Phẩm</a>
+                                <li
+                                    className="cursor-pointer py-1 font-bold text-[--main-color] hover:text-[--main-color]"
+                                    onClick={() => setFilters({ ...filters, genres: null })}
+                                >
+                                    <span>Tất Cả Sản Phẩm</span>
                                 </li>
-                                <li className="py-1 hover:text-[--main-color]">
-                                    <a href="#">Kỹ Năng Sống</a>
+                                <li
+                                    className="cursor-pointer py-1 hover:text-[--main-color]"
+                                    onClick={() => setFilters({ ...filters, genres: [] })}
+                                >
+                                    <span>Kỹ Năng Sống</span>
                                 </li>
-                                <li className="py-1 hover:text-[--main-color]">
-                                    <a href="#">Kinh Tế</a>
+                                <li
+                                    className="cursor-pointer py-1 hover:text-[--main-color]"
+                                    onClick={() => setFilters({ ...filters, genres: ['Kinh Tế'] })}
+                                >
+                                    <span>Kinh Tế</span>
                                 </li>
-                                <li className="py-1 hover:text-[--main-color]">
-                                    <a href="#">Kinh Điển</a>
+                                <li
+                                    className="cursor-pointer py-1 hover:text-[--main-color]"
+                                    onClick={() => setFilters({ ...filters, genres: ['Kinh Điển'] })}
+                                >
+                                    <span>Kinh Điển</span>
                                 </li>
-                                <li className="py-1 hover:text-[--main-color]">
-                                    <a href="#">Tiểu Thuyết</a>
+                                <li
+                                    className="cursor-pointer py-1 hover:text-[--main-color]"
+                                    onClick={() => setFilters({ ...filters, genres: ['Tiểu Thuyết'] })}
+                                >
+                                    <span>Tiểu Thuyết</span>
                                 </li>
-                                <li className="py-1 hover:text-[--main-color]">
-                                    <a href="#">Manga</a>
+                                <li
+                                    className="cursor-pointer py-1 hover:text-[--main-color]"
+                                    onClick={() => setFilters({ ...filters, genres: ['Manga'] })}
+                                >
+                                    <span>Manga</span>
                                 </li>
                             </ul>
                         </div>
@@ -50,45 +107,55 @@ function Products() {
                             <div className="flex flex-col px-2">
                                 <div className="py-1">
                                     <input
-                                        id="price1"
-                                        name="price"
+                                        id="0-150000"
+                                        name="0-150000"
                                         type="checkbox"
                                         className="text-[--main-color] accent-current"
+                                        onChange={handlePriceRangeChecked}
                                     />
-                                    <label htmlFor="price1" className="ml-2 cursor-pointer hover:text-[--main-color]">
+                                    <label htmlFor="0-150000" className="ml-2 cursor-pointer hover:text-[--main-color]">
                                         0đ - 150,000đ
                                     </label>
                                 </div>
                                 <div className="py-1">
                                     <input
-                                        id="price2"
-                                        name="price"
+                                        id="150000-300000"
+                                        name="150000-300000"
                                         type="checkbox"
                                         className="text-[--main-color] accent-current"
+                                        onChange={handlePriceRangeChecked}
                                     />
-                                    <label htmlFor="price2" className="ml-2 cursor-pointer hover:text-[--main-color]">
+                                    <label
+                                        htmlFor="150000-300000"
+                                        className="ml-2 cursor-pointer hover:text-[--main-color]"
+                                    >
                                         150,000đ - 300,000đ
                                     </label>
                                 </div>
                                 <div className="py-1">
                                     <input
-                                        id="price3"
-                                        name="price"
+                                        id="300000-500000"
+                                        name="300000-500000"
                                         type="checkbox"
                                         className="text-[--main-color] accent-current"
+                                        onChange={handlePriceRangeChecked}
                                     />
-                                    <label htmlFor="price3" className="ml-2 cursor-pointer hover:text-[--main-color]">
+                                    <label
+                                        htmlFor="300000-500000"
+                                        className="ml-2 cursor-pointer hover:text-[--main-color]"
+                                    >
                                         300,000đ - 500,000đ
                                     </label>
                                 </div>
                                 <div className="py-1">
                                     <input
-                                        id="price4"
-                                        name="price"
+                                        id="500000"
+                                        name="500000"
                                         type="checkbox"
                                         className="text-[--main-color] accent-current"
+                                        onChange={handlePriceRangeChecked}
                                     />
-                                    <label htmlFor="price4" className="ml-2 cursor-pointer hover:text-[--main-color]">
+                                    <label htmlFor="500000" className="ml-2 cursor-pointer hover:text-[--main-color]">
                                         500,000đ - Trở lên
                                     </label>
                                 </div>
@@ -100,9 +167,10 @@ function Products() {
                                 <div className="py-1">
                                     <input
                                         id="publisher1"
-                                        name="publisher"
+                                        name="NXB Hội Nhà Văn"
                                         type="checkbox"
                                         className="text-[--main-color] accent-current"
+                                        onClick={handlePublisherChecked}
                                     />
                                     <label
                                         htmlFor="publisher1"
@@ -114,9 +182,10 @@ function Products() {
                                 <div className="py-1">
                                     <input
                                         id="publisher2"
-                                        name="publisher"
+                                        name="NXB Dân Trí"
                                         type="checkbox"
                                         className="text-[--main-color] accent-current"
+                                        onClick={handlePublisherChecked}
                                     />
                                     <label
                                         htmlFor="publisher2"
@@ -128,9 +197,10 @@ function Products() {
                                 <div className="py-1">
                                     <input
                                         id="publisher3"
-                                        name="publisher"
+                                        name="NXB Tổng Hợp TPHCM"
                                         type="checkbox"
                                         className="text-[--main-color] accent-current"
+                                        onClick={handlePublisherChecked}
                                     />
                                     <label
                                         htmlFor="publisher3"
@@ -142,9 +212,10 @@ function Products() {
                                 <div className="py-1">
                                     <input
                                         id="publisher4"
-                                        name="publisher"
+                                        name="NXB Thế Giới"
                                         type="checkbox"
                                         className="text-[--main-color] accent-current"
+                                        onClick={handlePublisherChecked}
                                     />
                                     <label
                                         htmlFor="publisher4"
@@ -156,9 +227,10 @@ function Products() {
                                 <div className="py-1">
                                     <input
                                         id="publisher5"
-                                        name="publisher"
+                                        name="NXB Văn Học"
                                         type="checkbox"
                                         className="text-[--main-color] accent-current"
+                                        onClick={handlePublisherChecked}
                                     />
                                     <label
                                         htmlFor="publisher5"
@@ -170,9 +242,10 @@ function Products() {
                                 <div className="py-1">
                                     <input
                                         id="publisher6"
-                                        name="publisher"
+                                        name="NXB Hồng Đức"
                                         type="checkbox"
                                         className="text-[--main-color] accent-current"
+                                        onClick={handlePublisherChecked}
                                     />
                                     <label
                                         htmlFor="publisher6"
@@ -184,9 +257,10 @@ function Products() {
                                 <div className="py-1">
                                     <input
                                         id="publisher7"
-                                        name="publisher"
+                                        name="NXB Kim Đồng"
                                         type="checkbox"
                                         className="text-[--main-color] accent-current"
+                                        onClick={handlePublisherChecked}
                                     />
                                     <label
                                         htmlFor="publisher7"
