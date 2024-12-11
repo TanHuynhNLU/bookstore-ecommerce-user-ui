@@ -1,19 +1,41 @@
 import { ChevronRightIcon, ShoppingCartIcon, Square3Stack3DIcon } from '@heroicons/react/24/outline';
 import { useEffect, useState } from 'react';
 import ReactPaginate from 'react-paginate';
+import { Link, NavLink, useParams } from 'react-router-dom';
 
 import BookImage from '~/assets/imgs/nha-gia-kim.jpg';
 import * as productService from '~/services/ProductService';
+import * as utils from '~/utils/utils';
 
 function Products() {
+    let { genre } = useParams();
+
+    const paramsMapping = {
+        'tat-ca': '',
+        'ky-nang-song': 'Kỹ Năng Sống',
+        'kinh-te': 'Kinh Tế',
+        'kinh-dien': 'Kinh Điển',
+        'tieu-thuyet': 'Tiểu Thuyết',
+        manga: 'Manga',
+    };
+
+    const sortMapping = {
+        '': 'Mặc định',
+        '-id': 'Sách mới',
+        price: 'Giá thấp - cao',
+        '-price': 'Giá cao - thấp',
+    };
     const [filters, setFilters] = useState({
-        genres: [],
+        genres: paramsMapping[genre],
         publishers: [],
         priceRanges: [],
         page: 0,
-        size: 10,
+        size: 8,
         sort: '',
     });
+
+    const [books, setBooks] = useState([]);
+    const [totalPages, setTotalPages] = useState(0);
 
     const handlePriceRangeChecked = (e) => {
         const { name, checked } = e.target;
@@ -34,23 +56,34 @@ function Products() {
         }
     };
 
+    // Invoke when user click to request another page.
+    const handlePageClick = (event) => {
+        setFilters({ ...filters, page: event.selected });
+    };
+
+    useEffect(() => {
+        setFilters({ ...filters, genres: paramsMapping[genre] });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [genre]);
+
     // Fetching products from API by filter
     useEffect(() => {
         const fetchAPI = async () => {
             const res = await productService.getBooksByFilter(filters);
+            setBooks(res.items);
+            setTotalPages(res.totalPages);
         };
         fetchAPI();
     }, [filters]);
 
-    console.log(filters);
     return (
         <div>
             <div className="flex items-center justify-center bg-banner">
                 <div className="w-full max-w-7xl px-2 py-3">
                     <ul className="flex">
-                        <li className="hover:text-[--main-color]">
-                            <a href="#">Trang chủ</a>
-                        </li>
+                        <Link to="/" className="block hover:text-[--main-color]">
+                            <span>Trang chủ</span>
+                        </Link>
                         <li className="ml-1 text-[--main-color]">
                             <ChevronRightIcon className="inline-block h-4 w-4" />
                             <span className="ml-1 font-bold">Sản phẩm</span>
@@ -64,42 +97,66 @@ function Products() {
                         <div className="border-b-2 border-solid border-gray-200 py-2">
                             <h5 className="font-bold">NHÓM SẢN PHẨM</h5>
                             <ul>
-                                <li
-                                    className="cursor-pointer py-1 font-bold text-[--main-color] hover:text-[--main-color]"
-                                    onClick={() => setFilters({ ...filters, genres: null })}
+                                <NavLink
+                                    to="/products/genre/tat-ca"
+                                    className="block cursor-pointer py-1 hover:text-[--main-color]"
+                                    style={({ isActive }) => ({
+                                        color: isActive ? 'var(--main-color)' : 'black',
+                                        fontWeight: isActive ? 'bold' : 'normal',
+                                    })}
                                 >
                                     <span>Tất Cả Sản Phẩm</span>
-                                </li>
-                                <li
-                                    className="cursor-pointer py-1 hover:text-[--main-color]"
-                                    onClick={() => setFilters({ ...filters, genres: [] })}
+                                </NavLink>
+                                <NavLink
+                                    to="/products/genre/ky-nang-song"
+                                    className="block cursor-pointer py-1 hover:text-[--main-color]"
+                                    style={({ isActive }) => ({
+                                        color: isActive ? 'var(--main-color)' : 'black',
+                                        fontWeight: isActive ? 'bold' : 'normal',
+                                    })}
                                 >
                                     <span>Kỹ Năng Sống</span>
-                                </li>
-                                <li
-                                    className="cursor-pointer py-1 hover:text-[--main-color]"
-                                    onClick={() => setFilters({ ...filters, genres: ['Kinh Tế'] })}
+                                </NavLink>
+                                <NavLink
+                                    to="/products/genre/kinh-te"
+                                    className="block cursor-pointer py-1 hover:text-[--main-color]"
+                                    style={({ isActive }) => ({
+                                        color: isActive ? 'var(--main-color)' : 'black',
+                                        fontWeight: isActive ? 'bold' : 'normal',
+                                    })}
                                 >
                                     <span>Kinh Tế</span>
-                                </li>
-                                <li
-                                    className="cursor-pointer py-1 hover:text-[--main-color]"
-                                    onClick={() => setFilters({ ...filters, genres: ['Kinh Điển'] })}
+                                </NavLink>
+                                <NavLink
+                                    to="/products/genre/kinh-dien"
+                                    className="block cursor-pointer py-1 hover:text-[--main-color]"
+                                    style={({ isActive }) => ({
+                                        color: isActive ? 'var(--main-color)' : 'black',
+                                        fontWeight: isActive ? 'bold' : 'normal',
+                                    })}
                                 >
                                     <span>Kinh Điển</span>
-                                </li>
-                                <li
-                                    className="cursor-pointer py-1 hover:text-[--main-color]"
-                                    onClick={() => setFilters({ ...filters, genres: ['Tiểu Thuyết'] })}
+                                </NavLink>
+                                <NavLink
+                                    to="/products/genre/tieu-thuyet"
+                                    className="block cursor-pointer py-1 hover:text-[--main-color]"
+                                    style={({ isActive }) => ({
+                                        color: isActive ? 'var(--main-color)' : 'black',
+                                        fontWeight: isActive ? 'bold' : 'normal',
+                                    })}
                                 >
                                     <span>Tiểu Thuyết</span>
-                                </li>
-                                <li
+                                </NavLink>
+                                <NavLink
+                                    to="/products/genre/manga"
                                     className="cursor-pointer py-1 hover:text-[--main-color]"
-                                    onClick={() => setFilters({ ...filters, genres: ['Manga'] })}
+                                    style={({ isActive }) => ({
+                                        color: isActive ? 'var(--main-color)' : 'black',
+                                        fontWeight: isActive ? 'bold' : 'normal',
+                                    })}
                                 >
                                     <span>Manga</span>
-                                </li>
+                                </NavLink>
                             </ul>
                         </div>
                         <div className="border-b-2 border-solid border-gray-200 py-2">
@@ -277,178 +334,111 @@ function Products() {
                             <div className=" flex">
                                 <Square3Stack3DIcon className="inline-block h-6 w-6 text-gray-400" />
                                 <span className="ml-2 text-[#2E3A59]">Sắp xếp theo</span>
-                                <span className="ml-2 text-[--main-color] md:hidden">Mặc định</span>
+                                <span className="ml-2 text-[--main-color] md:hidden">{sortMapping[filters.sort]}</span>
                             </div>
                             <div className="hidden md:flex">
-                                <button className="ml-2 rounded-md bg-[#7B7B7D] p-2 text-white">Mặc định</button>
-                                <button className="ml-2 rounded-md bg-white p-2 text-[#2E3A59] hover:bg-[#7B7B7D] hover:text-white">
+                                <button
+                                    onClick={(e) => setFilters({ ...filters, sort: '' })}
+                                    className={`ml-2 rounded-md ${filters.sort === '' ? 'bg-[#7B7B7D] text-white' : 'bg-white text-[#2E3A59]'} p-2 hover:bg-[#7B7B7D] hover:text-white`}
+                                >
+                                    Mặc định
+                                </button>
+                                <button
+                                    onClick={(e) => setFilters({ ...filters, sort: '-id' })}
+                                    className={`ml-2 rounded-md ${filters.sort === '-id' ? 'bg-[#7B7B7D] text-white' : 'bg-white text-[#2E3A59]'} p-2 hover:bg-[#7B7B7D] hover:text-white`}
+                                >
                                     Sách mới
                                 </button>
-                                <button className="ml-2 rounded-md bg-white p-2 text-[#2E3A59] hover:bg-[#7B7B7D] hover:text-white">
+                                <button
+                                    onClick={(e) => setFilters({ ...filters, sort: 'price' })}
+                                    className={`ml-2 rounded-md ${filters.sort === 'price' ? 'bg-[#7B7B7D] text-white' : 'bg-white text-[#2E3A59]'} p-2 hover:bg-[#7B7B7D] hover:text-white`}
+                                >
                                     Giá thấp - cao
                                 </button>
-                                <button className="ml-2 rounded-md bg-white p-2 text-[#2E3A59] hover:bg-[#7B7B7D] hover:text-white">
+                                <button
+                                    onClick={(e) => setFilters({ ...filters, sort: '-price' })}
+                                    className={`ml-2 rounded-md ${filters.sort === '-price' ? 'bg-[#7B7B7D] text-white' : 'bg-white text-[#2E3A59]'} p-2 hover:bg-[#7B7B7D] hover:text-white`}
+                                >
                                     Giá cao - thấp
                                 </button>
                             </div>
                             <ul className="absolute top-full z-[1] hidden w-[210px] overflow-hidden rounded-md border border-solid border-gray-200 bg-white shadow-md group-hover/sort:block group-hover/sort:md:hidden">
-                                <li className="h-8 cursor-pointer rounded-md px-2 hover:bg-[#7B7B7D] hover:text-white">
+                                <li
+                                    onClick={(e) => setFilters({ ...filters, sort: '' })}
+                                    className={`h-8 cursor-pointer rounded-md px-2 hover:bg-[#7B7B7D] hover:text-white ${filters.sort === '' ? 'bg-[#7B7B7D] text-white' : 'bg-white text-black'}`}
+                                >
                                     Mặc định
                                 </li>
-                                <li className="h-8 cursor-pointer rounded-md px-2 hover:bg-[#7B7B7D] hover:text-white">
+                                <li
+                                    onClick={(e) => setFilters({ ...filters, sort: '-id' })}
+                                    className={`h-8 cursor-pointer rounded-md px-2 hover:bg-[#7B7B7D] hover:text-white ${filters.sort === '-id' ? 'bg-[#7B7B7D] text-white' : 'bg-white text-black'}`}
+                                >
                                     Sách mới
                                 </li>
-                                <li className="h-8 cursor-pointer rounded-md px-2 hover:bg-[#7B7B7D] hover:text-white">
+                                <li
+                                    onClick={(e) => setFilters({ ...filters, sort: 'price' })}
+                                    className={`h-8 cursor-pointer rounded-md px-2 hover:bg-[#7B7B7D] hover:text-white ${filters.sort === 'price' ? 'bg-[#7B7B7D] text-white' : 'bg-white text-black'}`}
+                                >
                                     Giá thấp - cao
                                 </li>
-                                <li className="h-8 cursor-pointer rounded-md px-2 hover:bg-[#7B7B7D] hover:text-white">
+                                <li
+                                    onClick={(e) => setFilters({ ...filters, sort: '-price' })}
+                                    className={`h-8 cursor-pointer rounded-md px-2 hover:bg-[#7B7B7D] hover:text-white ${filters.sort === '-price' ? 'bg-[#7B7B7D] text-white' : 'bg-white text-black'}`}
+                                >
                                     Giá cao - thấp
                                 </li>
                             </ul>
                         </div>
                         <div className="flex flex-wrap">
-                            <div className="inline-flex w-1/2 flex-col items-center px-2 py-2 hover:shadow-md md:w-1/4">
-                                <a href="#" className="group/product-image relative inline-block overflow-hidden">
-                                    <img
-                                        src={BookImage}
-                                        alt="image"
-                                        className="inline-block w-full scale-100 transform object-cover transition-transform duration-200 ease-in-out group-hover/product-image:scale-110"
-                                    />
-                                    <div className="absolute bottom-[-100%] flex w-full px-8 transition-all duration-200 group-hover/product-image:bottom-0">
-                                        <button className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-md border border-solid border-[--main-color] bg-[#f5f5f5] text-[--main-color] hover:bg-[--main-color] hover:text-white">
-                                            <ShoppingCartIcon className="h-4 w-4" />
-                                        </button>
-                                        <button className="ml-1 flex h-12 w-full flex-1 items-center justify-center rounded-md border border-solid border-[--main-color] bg-[--main-color] font-bold text-white hover:bg-[#f5f5f5] hover:text-[--main-color]">
-                                            Mua ngay
-                                        </button>
-                                    </div>
-                                </a>
-                                <div className="flex max-w-[160px] flex-col p-2">
-                                    <a href="#" className="inline-block">
-                                        <h3 className="line-clamp-2 text-center font-bold uppercase">
-                                            Nhà Giả Kim Nhà Giả Kim Nhà Giả Kim Nhà Giả Kim
-                                        </h3>
+                            {books.map((book) => (
+                                <div className="inline-flex w-1/2 flex-col items-center px-2 py-2 hover:shadow-md md:w-1/4">
+                                    <a href="#" className="group/product-image relative inline-block overflow-hidden">
+                                        <img
+                                            src={book.image || BookImage}
+                                            alt="image"
+                                            className="inline-block w-full scale-100 transform object-cover transition-transform duration-200 ease-in-out group-hover/product-image:scale-110"
+                                        />
+                                        <div className="absolute bottom-[-100%] flex w-full px-8 transition-all duration-200 group-hover/product-image:bottom-0">
+                                            <button className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-md border border-solid border-[--main-color] bg-[#f5f5f5] text-[--main-color] hover:bg-[--main-color] hover:text-white">
+                                                <ShoppingCartIcon className="h-4 w-4" />
+                                            </button>
+                                            <button className="ml-1 flex h-12 w-full flex-1 items-center justify-center rounded-md border border-solid border-[--main-color] bg-[--main-color] font-bold text-white hover:bg-[#f5f5f5] hover:text-[--main-color]">
+                                                Mua ngay
+                                            </button>
+                                        </div>
                                     </a>
-                                    <span className="text-center font-bold text-[--main-color]">89.000đ</span>
-                                </div>
-                            </div>
-                            <div className="inline-flex w-1/2 flex-col items-center px-2 py-2 hover:shadow-md md:w-1/4">
-                                <a href="#" className="group/product-image relative inline-block overflow-hidden">
-                                    <img
-                                        src={BookImage}
-                                        alt="image"
-                                        className="inline-block w-full scale-100 transform object-cover transition-transform duration-200 ease-in-out group-hover/product-image:scale-110"
-                                    />
-                                    <div className="absolute bottom-[-100%] flex w-full px-8 transition-all duration-200 group-hover/product-image:bottom-0">
-                                        <button className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-md border border-solid border-[--main-color] bg-[#f5f5f5] text-[--main-color] hover:bg-[--main-color] hover:text-white">
-                                            <ShoppingCartIcon className="h-4 w-4" />
-                                        </button>
-                                        <button className="ml-1 flex h-12 w-full flex-1 items-center justify-center rounded-md border border-solid border-[--main-color] bg-[--main-color] font-bold text-white hover:bg-[#f5f5f5] hover:text-[--main-color]">
-                                            Mua ngay
-                                        </button>
+                                    <div className="flex max-w-[160px] flex-col p-2">
+                                        <a href="#" className="inline-block">
+                                            <h3 className="line-clamp-2 text-center font-bold uppercase">
+                                                {book.name}
+                                            </h3>
+                                        </a>
+                                        <span className="text-center font-bold text-[--main-color]">
+                                            {utils.formatNumber(book.price)}đ
+                                        </span>
                                     </div>
-                                </a>
-                                <div className="flex max-w-[160px] flex-col p-2">
-                                    <a href="#" className="inline-block">
-                                        <h3 className="line-clamp-2 text-center font-bold uppercase">
-                                            Nhà Giả Kim Nhà Giả Kim Nhà Giả Kim Nhà Giả Kim
-                                        </h3>
-                                    </a>
-                                    <span className="text-center font-bold text-[--main-color]">89.000đ</span>
                                 </div>
-                            </div>
-                            <div className="inline-flex w-1/2 flex-col items-center px-2 py-2 hover:shadow-md md:w-1/4">
-                                <a href="#" className="group/product-image relative inline-block overflow-hidden">
-                                    <img
-                                        src={BookImage}
-                                        alt="image"
-                                        className="inline-block w-full scale-100 transform object-cover transition-transform duration-200 ease-in-out group-hover/product-image:scale-110"
-                                    />
-                                    <div className="absolute bottom-[-100%] flex w-full px-8 transition-all duration-200 group-hover/product-image:bottom-0">
-                                        <button className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-md border border-solid border-[--main-color] bg-[#f5f5f5] text-[--main-color] hover:bg-[--main-color] hover:text-white">
-                                            <ShoppingCartIcon className="h-4 w-4" />
-                                        </button>
-                                        <button className="ml-1 flex h-12 w-full flex-1 items-center justify-center rounded-md border border-solid border-[--main-color] bg-[--main-color] font-bold text-white hover:bg-[#f5f5f5] hover:text-[--main-color]">
-                                            Mua ngay
-                                        </button>
-                                    </div>
-                                </a>
-                                <div className="flex max-w-[160px] flex-col p-2">
-                                    <a href="#" className="inline-block">
-                                        <h3 className="line-clamp-2 text-center font-bold uppercase">
-                                            Nhà Giả Kim Nhà Giả Kim Nhà Giả Kim Nhà Giả Kim
-                                        </h3>
-                                    </a>
-                                    <span className="text-center font-bold text-[--main-color]">89.000đ</span>
-                                </div>
-                            </div>
-                            <div className="inline-flex w-1/2 flex-col items-center px-2 py-2 hover:shadow-md md:w-1/4">
-                                <a href="#" className="group/product-image relative inline-block overflow-hidden">
-                                    <img
-                                        src={BookImage}
-                                        alt="image"
-                                        className="inline-block w-full scale-100 transform object-cover transition-transform duration-200 ease-in-out group-hover/product-image:scale-110"
-                                    />
-                                    <div className="absolute bottom-[-100%] flex w-full px-8 transition-all duration-200 group-hover/product-image:bottom-0">
-                                        <button className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-md border border-solid border-[--main-color] bg-[#f5f5f5] text-[--main-color] hover:bg-[--main-color] hover:text-white">
-                                            <ShoppingCartIcon className="h-4 w-4" />
-                                        </button>
-                                        <button className="ml-1 flex h-12 w-full flex-1 items-center justify-center rounded-md border border-solid border-[--main-color] bg-[--main-color] font-bold text-white hover:bg-[#f5f5f5] hover:text-[--main-color]">
-                                            Mua ngay
-                                        </button>
-                                    </div>
-                                </a>
-                                <div className="flex max-w-[160px] flex-col p-2">
-                                    <a href="#" className="inline-block">
-                                        <h3 className="line-clamp-2 text-center font-bold uppercase">
-                                            Nhà Giả Kim Nhà Giả Kim Nhà Giả Kim Nhà Giả Kim
-                                        </h3>
-                                    </a>
-                                    <span className="text-center font-bold text-[--main-color]">89.000đ</span>
-                                </div>
-                            </div>
-                            <div className="inline-flex w-1/2 flex-col items-center px-2 py-2 hover:shadow-md md:w-1/4 ">
-                                <a href="#" className="group/product-image relative inline-block overflow-hidden">
-                                    <img
-                                        src={BookImage}
-                                        alt="image"
-                                        className="inline-block w-full scale-100 transform object-cover transition-transform duration-200 ease-in-out group-hover/product-image:scale-110"
-                                    />
-                                    <div className="absolute bottom-[-100%] flex w-full px-8 transition-all duration-200 group-hover/product-image:bottom-0">
-                                        <button className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-md border border-solid border-[--main-color] bg-[#f5f5f5] text-[--main-color] hover:bg-[--main-color] hover:text-white">
-                                            <ShoppingCartIcon className="h-4 w-4" />
-                                        </button>
-                                        <button className="ml-1 flex h-12 w-full flex-1 items-center justify-center rounded-md border border-solid border-[--main-color] bg-[--main-color] font-bold text-white hover:bg-[#f5f5f5] hover:text-[--main-color]">
-                                            Mua ngay
-                                        </button>
-                                    </div>
-                                </a>
-                                <div className="flex max-w-[160px] flex-col p-2">
-                                    <a href="#" className="inline-block">
-                                        <h3 className="line-clamp-2 text-center font-bold uppercase">
-                                            Nhà Giả Kim Nhà Giả Kim Nhà Giả Kim Nhà Giả Kim
-                                        </h3>
-                                    </a>
-                                    <span className="text-center font-bold text-[--main-color]">89.000đ</span>
-                                </div>
-                            </div>
+                            ))}
                         </div>
                         <div className="flex items-center justify-center py-3">
-                            <ReactPaginate
-                                breakLabel="..."
-                                nextLabel=">"
-                                pageRangeDisplayed={3}
-                                marginPagesDisplayed={1}
-                                pageCount={10}
-                                previousLabel="<"
-                                renderOnZeroPageCount={null}
-                                className="flex text-xl"
-                                previousLinkClassName="w-6 h-6 mx-2 border border-solid hover:border-[--main-color] hover:text-[--main-color] border-transparent inline-flex justify-center items-center rounded-full"
-                                pageLinkClassName="w-6 h-6 mx-2 border border-solid hover:border-[--main-color] hover:text-[--main-color] border-transparent inline-flex justify-center items-center rounded-full"
-                                nextLinkClassName="w-6 h-6 mx-2 border border-solid hover:border-[--main-color] hover:text-[--main-color] border-transparent inline-flex justify-center items-center rounded-full"
-                                breakLinkClassName="w-6 h-6 mx-2 border border-solid hover:border-[--main-color] hover:text-[--main-color] border-transparent inline-flex justify-center items-center rounded-full"
-                                activeLinkClassName="border-[#228b22!important] text-[--main-color]"
-                            />
+                            {totalPages > 1 && (
+                                <ReactPaginate
+                                    breakLabel="..."
+                                    nextLabel=">"
+                                    pageRangeDisplayed={3}
+                                    marginPagesDisplayed={1}
+                                    pageCount={totalPages}
+                                    previousLabel="<"
+                                    renderOnZeroPageCount={null}
+                                    className="flex text-xl"
+                                    previousLinkClassName="w-6 h-6 mx-2 border border-solid hover:border-[--main-color] hover:text-[--main-color] border-transparent inline-flex justify-center items-center rounded-full"
+                                    pageLinkClassName="w-6 h-6 mx-2 border border-solid hover:border-[--main-color] hover:text-[--main-color] border-transparent inline-flex justify-center items-center rounded-full"
+                                    nextLinkClassName="w-6 h-6 mx-2 border border-solid hover:border-[--main-color] hover:text-[--main-color] border-transparent inline-flex justify-center items-center rounded-full"
+                                    breakLinkClassName="w-6 h-6 mx-2 border border-solid hover:border-[--main-color] hover:text-[--main-color] border-transparent inline-flex justify-center items-center rounded-full"
+                                    activeLinkClassName="border-[#228b22!important] text-[--main-color]"
+                                    onPageChange={handlePageClick}
+                                />
+                            )}
                         </div>
                     </div>
                 </div>

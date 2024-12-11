@@ -41,7 +41,7 @@ function Header() {
                     </li>
                     <li className="group/products relative h-full px-4">
                         <Link
-                            to="/products"
+                            to="/products/genre/tat-ca"
                             className=" inline-flex h-full items-center justify-center font-bold hover:text-[--main-color]"
                         >
                             Sản Phẩm
@@ -50,31 +50,36 @@ function Header() {
                             </span>
                         </Link>
                         <ul className="absolute left-0 top-full hidden min-w-[200px] rounded-md bg-white shadow-nav-popup before:absolute before:-top-3 before:left-8 before:block before:h-6 before:w-6 before:rotate-45 before:bg-white group-hover/products:inline-block">
-                            <li className="cursor-pointer px-4 py-2 hover:text-[--main-color]">
-                                <a className="h-full w-full" href="#">
-                                    Kỹ Năng Sống
-                                </a>
-                            </li>
-                            <li className="cursor-pointer px-4 py-2 hover:text-[--main-color]">
-                                <a className="h-full w-full" href="#">
-                                    Kinh Tế
-                                </a>
-                            </li>
-                            <li className="cursor-pointer px-4 py-2 hover:text-[--main-color]">
-                                <a className="h-full w-full" href="#">
-                                    Kinh Điển
-                                </a>
-                            </li>
-                            <li className="cursor-pointer px-4 py-2 hover:text-[--main-color]">
-                                <a className="h-full w-full" href="#">
-                                    Tiểu Thuyết
-                                </a>
-                            </li>
-                            <li className="cursor-pointer px-4 py-2 hover:text-[--main-color]">
-                                <a className="h-full w-full" href="#">
-                                    Manga
-                                </a>
-                            </li>
+                            <Link
+                                to="/products/genre/ky-nang-song"
+                                className="block cursor-pointer px-4 py-2 hover:text-[--main-color]"
+                            >
+                                <span className="inline-block h-full w-full">Kỹ Năng Sống</span>
+                            </Link>
+                            <Link
+                                to="/products/genre/kinh-te"
+                                className="block cursor-pointer px-4 py-2 hover:text-[--main-color]"
+                            >
+                                <span className="inline-block h-full w-full">Kinh Tế</span>
+                            </Link>
+                            <Link
+                                to="/products/genre/kinh-dien"
+                                className="block cursor-pointer px-4 py-2 hover:text-[--main-color]"
+                            >
+                                <span className="inline-block h-full w-full">Kinh Điển</span>
+                            </Link>
+                            <Link
+                                to="/products/genre/tieu-thuyet"
+                                className="block cursor-pointer px-4 py-2 hover:text-[--main-color]"
+                            >
+                                <span className="inline-block h-full w-full">Tiểu Thuyết</span>
+                            </Link>
+                            <Link
+                                to="/products/genre/manga"
+                                className="block cursor-pointer px-4 py-2 hover:text-[--main-color]"
+                            >
+                                <span className="inline-block h-full w-full">Manga</span>
+                            </Link>
                         </ul>
                     </li>
                     <li className="h-full px-4 hover:text-[--main-color]">
@@ -229,12 +234,9 @@ function MobileMenu({ isShow, onClose }) {
                     </div>
                 </div>
                 <ul className="h-full w-full">
-                    <li className="w-full hover:text-[--main-color]">
-                        <a className="inline-block w-full p-2 font-bold" href="#">
-                            Trang Chủ
-                        </a>
-                    </li>
-
+                    <Link to="/" className="block w-full hover:text-[--main-color]">
+                        <span className="inline-block w-full p-2 font-bold">Trang Chủ</span>
+                    </Link>
                     <li className="w-full hover:text-[--main-color]">
                         <a className="inline-block w-full p-2 font-bold" href="#">
                             Tin Sách
@@ -242,7 +244,10 @@ function MobileMenu({ isShow, onClose }) {
                     </li>
                     <li>
                         <span className="inline-flex w-full flex-col px-2 font-bold" href="#">
-                            <div className="flex justify-between py-2 hover:text-[--main-color]">
+                            <Link
+                                to="/products/genre/tat-ca"
+                                className="flex justify-between py-2 hover:text-[--main-color]"
+                            >
                                 <span>Sản Phẩm</span>
                                 <span
                                     className={`ml-1 inline-flex items-center justify-center transition-transform duration-300 ${productsCollapse ? '' : 'rotate-180'}`}
@@ -250,33 +255,29 @@ function MobileMenu({ isShow, onClose }) {
                                 >
                                     <ChevronDownIcon className="inline-block h-4 w-4" />
                                 </span>
-                            </div>
+                            </Link>
                             <ul className={`flex-col ${productsCollapse ? 'hidden' : 'flex'}`}>
-                                <li className="w-full hover:text-[--main-color]">
-                                    <a className="inline-block w-full p-2 font-bold" href="#">
-                                        Kỹ Năng Sống
-                                    </a>
-                                </li>
-                                <li className="w-full hover:text-[--main-color]">
-                                    <a className="inline-block w-full p-2 font-bold" href="#">
-                                        Kinh Tế
-                                    </a>
-                                </li>
-                                <li className="w-full hover:text-[--main-color]">
-                                    <a className="inline-block w-full p-2 font-bold" href="#">
-                                        Kinh Điển
-                                    </a>
-                                </li>
-                                <li className="w-full hover:text-[--main-color]">
-                                    <a className="inline-block w-full p-2 font-bold" href="#">
-                                        Tiểu Thuyết
-                                    </a>
-                                </li>
-                                <li className="w-full hover:text-[--main-color]">
-                                    <a className="inline-block w-full p-2 font-bold" href="#">
-                                        Manga
-                                    </a>
-                                </li>
+                                <Link
+                                    to="/products/genre/ky-nang-song"
+                                    className="block w-full hover:text-[--main-color]"
+                                >
+                                    <span className="inline-block w-full p-2 font-bold">Kỹ Năng Sống</span>
+                                </Link>
+                                <Link to="/products/genre/kinh-te" className="block w-full hover:text-[--main-color]">
+                                    <span className="inline-block w-full p-2 font-bold">Kinh Tế</span>
+                                </Link>
+                                <Link to="/products/genre/kinh-dien" className="block w-full hover:text-[--main-color]">
+                                    <span className="inline-block w-full p-2 font-bold">Kinh Điển</span>
+                                </Link>
+                                <Link
+                                    to="/products/genre/tieu-thuyet"
+                                    className="block w-full hover:text-[--main-color]"
+                                >
+                                    <span className="inline-block w-full p-2 font-bold">Tiểu Thuyết</span>
+                                </Link>
+                                <Link to="/products/genre/manga" className="block w-full hover:text-[--main-color]">
+                                    <span className="inline-block w-full p-2 font-bold">Manga</span>
+                                </Link>
                             </ul>
                         </span>
                     </li>

@@ -7,7 +7,7 @@ import Products from '~/pages/Products';
 
 export const routes = [
     { path: '/', component: Home },
-    { path: '/products', component: Products },
+    { path: '/products/genre/:genre', component: Products },
     { path: '/product-detail', component: ProductDetail },
     { path: '/contact', component: Contact },
     { path: '/cart', component: Cart },
