@@ -13,6 +13,7 @@ import Banner4 from '~/assets/imgs/banner4.jpg';
 import * as productService from '~/services/ProductService';
 import * as utils from '~/utils/utils';
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 function Home() {
     const [bestSellers, setBestSellers] = useState([]);
@@ -146,22 +147,25 @@ function Home() {
                 <div className="w-full max-w-7xl px-2">
                     <div className="mb-6 flex items-center justify-between border-t-2 border-solid border-[--main-color] pt-3 ">
                         <h2 className="text-xl font-bold text-[--main-color] md:text-2xl">
-                            <a href="#">Bán chạy</a>
+                            <Link to="/products/genre/tat-ca">Bán chạy</Link>
                         </h2>
-                        <a className="hidden font-bold text-[--main-color] md:inline-block" href="#">
+                        <Link
+                            to="/products/genre/tat-ca"
+                            className="hidden font-bold text-[--main-color] md:inline-block"
+                        >
                             Xem thêm <ArrowRightCircleIcon className="inline-block h-8 w-8" />
-                        </a>
+                        </Link>
                     </div>
                     <Swiper slidesPerView={'auto'} navigation={true} modules={[Navigation]} className="mySwiper">
                         {bestSellers.length !== 0 &&
                             bestSellers.map((book) => (
                                 <SwiperSlide className="w-item-prod-home-ssm sm:w-item-prod-home-sm lg:w-[252px!important]">
                                     <div className="z-[1] inline-flex flex-col items-center">
-                                        <a
-                                            href="#"
+                                        <Link
+                                            to={`/product-detail/${book.id}`}
                                             className="group/product-image relative inline-block overflow-hidden"
                                         >
-                                            <img src={book.image} alt="image" className="inline-block w-full" />
+                                            <img src={book.image} alt={book.name} className="inline-block w-full" />
                                             <div className="absolute bottom-[-100%] flex w-full px-8 transition-all duration-200 group-hover/product-image:bottom-0">
                                                 <button className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-md border border-solid border-[--main-color] bg-[#f5f5f5] text-[--main-color] hover:bg-[--main-color] hover:text-white">
                                                     <ShoppingCartIcon className="h-4 w-4" />
@@ -170,16 +174,19 @@ function Home() {
                                                     Mua ngay
                                                 </button>
                                             </div>
-                                        </a>
+                                        </Link>
                                         <div className="flex max-w-[160px] flex-col p-2">
-                                            <a href="#" className="group/book-name relative inline-block">
+                                            <Link
+                                                to={`/product-detail/${book.id}`}
+                                                className="group/book-name relative inline-block"
+                                            >
                                                 <h3 className="line-clamp-2 text-center font-bold uppercase">
                                                     {book.name}
                                                 </h3>
                                                 <span className="absolute bottom-full left-0 z-[2] hidden bg-white p-1 shadow-md group-hover/book-name:block">
                                                     {book.name}
                                                 </span>
-                                            </a>
+                                            </Link>
                                             <span className="text-center font-bold text-[--main-color]">
                                                 {utils.formatNumber(book.price)}đ
                                             </span>
@@ -194,22 +201,25 @@ function Home() {
                 <div className="w-full max-w-7xl px-2">
                     <div className="mb-6 flex items-center justify-between border-t-2 border-solid border-[--main-color] pt-3 ">
                         <h2 className="text-xl font-bold text-[--main-color] md:text-2xl">
-                            <a href="#">Sách mới</a>
+                            <Link to="/products/genre/tat-ca">Sách mới</Link>
                         </h2>
-                        <a className="hidden font-bold text-[--main-color] md:inline-block" href="#">
+                        <Link
+                            to="/products/genre/tat-ca"
+                            className="hidden font-bold text-[--main-color] md:inline-block"
+                        >
                             Xem thêm <ArrowRightCircleIcon className="inline-block h-8 w-8" />
-                        </a>
+                        </Link>
                     </div>
                     <Swiper slidesPerView={'auto'} navigation={true} modules={[Navigation]} className="mySwiper">
                         {newBooks.length !== 0 &&
                             newBooks.map((book) => (
                                 <SwiperSlide className="w-item-prod-home-ssm sm:w-item-prod-home-sm lg:w-[252px!important]">
                                     <div className="z-[1] inline-flex flex-col items-center">
-                                        <a
-                                            href="#"
+                                        <Link
+                                            to={`/product-detail/${book.id}`}
                                             className="group/product-image relative inline-block overflow-hidden"
                                         >
-                                            <img src={book.image} alt="image" className="inline-block w-full" />
+                                            <img src={book.image} alt={book.name} className="inline-block w-full" />
                                             <div className="absolute bottom-[-100%] flex w-full px-8 transition-all duration-200 group-hover/product-image:bottom-0">
                                                 <button className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-md border border-solid border-[--main-color] bg-[#f5f5f5] text-[--main-color] hover:bg-[--main-color] hover:text-white">
                                                     <ShoppingCartIcon className="h-4 w-4" />
@@ -218,16 +228,19 @@ function Home() {
                                                     Mua ngay
                                                 </button>
                                             </div>
-                                        </a>
+                                        </Link>
                                         <div className="flex max-w-[160px] flex-col p-2">
-                                            <a href="#" className="group/book-name relative inline-block">
+                                            <Link
+                                                to={`/product-detail/${book.id}`}
+                                                className="group/book-name relative inline-block"
+                                            >
                                                 <h3 className="line-clamp-2 text-center font-bold uppercase">
                                                     {book.name}
                                                 </h3>
                                                 <span className="absolute bottom-full left-0 z-[2] hidden bg-white p-1 shadow-md group-hover/book-name:block">
                                                     {book.name}
                                                 </span>
-                                            </a>
+                                            </Link>
                                             <span className="text-center font-bold text-[--main-color]">
                                                 {utils.formatNumber(book.price)}đ
                                             </span>

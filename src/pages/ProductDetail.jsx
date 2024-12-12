@@ -31,23 +31,79 @@ import lgFullscreen from 'lightgallery/plugins/fullscreen';
 import lgShare from 'lightgallery/plugins/share';
 
 import BookImage from '~/assets/imgs/nha-gia-kim.jpg';
+import { Link, useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import * as productService from '~/services/ProductService';
+import * as utils from '~/utils/utils';
 
 function ProductDetail() {
+    let { productId } = useParams();
+    const [product, setProduct] = useState({});
+    const [products, setProducts] = useState([]);
+    const [quantity, setQuantity] = useState(1);
+
+    const urlMapping = {
+        'Kỹ Năng Sống': 'ky-nang-song',
+        'Kinh Tế': 'kinh-te',
+        'Kinh Điển': 'kinh-dien',
+        'Tiểu Thuyết': 'tieu-thuyet',
+        Manga: 'manga',
+    };
+
+    const handleIncreaseQuantity = () => {
+        if (quantity < product.stock) {
+            setQuantity(quantity + 1);
+        }
+    };
+
+    const handleDecreaseQuantity = () => {
+        if (quantity > 1) {
+            setQuantity(quantity - 1);
+        }
+    };
+
+    // Fetching product by id from API
+    useEffect(() => {
+        const fetchAPI = async () => {
+            const res = await productService.getBook(productId);
+            setProduct(res.data);
+        };
+        fetchAPI();
+    }, [productId]);
+
+    // Fetching products of the same genre from the API
+    useEffect(() => {
+        const fetchAPI = async () => {
+            const res = await productService.getBooksByFilter({ genres: [product.genre] });
+            const productsTransformed = res.items.filter((book) => book.id !== Number(productId));
+            setProducts(productsTransformed);
+        };
+        if (product.id) fetchAPI();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [product]);
+
     return (
         <div>
             <div className="flex items-center justify-center bg-banner">
                 <div className="w-full max-w-7xl px-2 py-3">
                     <ul className="flex">
-                        <li className="hover:text-[--main-color]">
-                            <a href="#">Trang chủ</a>
-                        </li>
+                        <Link to="/" className="hover:text-[--main-color]">
+                            <span>Trang chủ</span>
+                        </Link>
+                        <Link to="/products/genre/tat-ca" className="ml-1 hover:text-[--main-color]">
+                            <ChevronRightIcon className="inline-block h-4 w-4" />
+                            <span className="ml-1">Sản phẩm</span>
+                        </Link>
+                        <Link
+                            to={`/products/genre/${urlMapping[product.genre]}`}
+                            className="ml-1 hover:text-[--main-color]"
+                        >
+                            <ChevronRightIcon className="inline-block h-4 w-4" />
+                            <span className="ml-1">{product.genre}</span>
+                        </Link>
                         <li className="ml-1 text-[--main-color]">
                             <ChevronRightIcon className="inline-block h-4 w-4" />
-                            <span className="ml-1 font-bold">Sản phẩm</span>
-                        </li>
-                        <li className="ml-1 text-[--main-color]">
-                            <ChevronRightIcon className="inline-block h-4 w-4" />
-                            <span className="ml-1 font-bold">Nhà Giả Kim</span>
+                            <span className="ml-1 font-bold">{product.name}</span>
                         </li>
                     </ul>
                 </div>
@@ -57,30 +113,47 @@ function ProductDetail() {
                     <div className="w-full px-2 lg:w-2/5">
                         <div className="flex aspect-square w-full items-center justify-center overflow-hidden rounded-md border border-solid border-gray-200">
                             <LightGallery speed={500} plugins={[lgThumbnail, lgZoom, lgRotate, lgFullscreen, lgShare]}>
-                                <a href="img/img1.jpg">
-                                    <img alt="img1" src={BookImage} />
+                                <a href={product.image}>
+                                    <img alt={product.name} src={product.image || BookImage} />
                                 </a>
                             </LightGallery>
                         </div>
                     </div>
                     <div className="w-full px-2 lg:w-2/5">
-                        <h1 className="mb-3 text-[30px] font-bold">Nhà Giả Kim</h1>
+                        <h1 className="mb-3 text-[30px] font-bold">{product.name}</h1>
                         <div>
-                            <span>Tác giả: </span> <span className="font-semibold">Nhà Giả Kim</span>
+                            <span>Tác giả: </span> <span className="font-semibold">{product.author}</span>
                         </div>
-                        <span className="my-5 block text-3xl font-bold text-[--main-color]">89.000đ</span>
+                        <div>
+                            <span>Thể loại: </span> <span className="font-semibold">{product.genre}</span>
+                        </div>
+                        <span className="my-5 block text-3xl font-bold text-[--main-color]">
+                            {utils.formatNumber(product.price)}đ
+                        </span>
                         <div className="border-b border-solid border-gray-200"></div>
                         <div className="mt-6 flex items-center">
                             <div className="flex h-[32px] w-[100px] rounded-md border border-solid border-x-gray-200">
-                                <button className="flex h-[32px] w-[30px] items-center justify-center">
+                                <button
+                                    className="flex h-[32px] w-[30px] items-center justify-center"
+                                    onClick={handleDecreaseQuantity}
+                                >
                                     <MinusIcon className="h-6 w-6" />
                                 </button>
-                                <input className="h-full w-[40px] text-center outline-none" type="text" value={1} />
-                                <button className="flex h-[32px] w-[30px] items-center justify-center">
+                                <input
+                                    className="h-full w-[40px] text-center outline-none"
+                                    type="text"
+                                    value={quantity}
+                                />
+                                <button
+                                    className="flex h-[32px] w-[30px] items-center justify-center"
+                                    onClick={handleIncreaseQuantity}
+                                >
                                     <PlusIcon className="h-6 w-6" />
                                 </button>
                             </div>
-                            <span className="ml-3 text-slate-400">Còn lại 99 trong kho </span>
+                            <span className="ml-3 text-slate-400">
+                                Còn lại {utils.formatNumber(product.stock)} trong kho
+                            </span>
                         </div>
                         <div className="mt-3 flex flex-col md:flex-row">
                             <button className="flex h-[65px] w-full items-center justify-center rounded-md border border-solid border-[--main-color] px-3 py-[6px] text-xl font-bold text-[--main-color] hover:bg-[--main-color] hover:text-white md:w-[224px]">
@@ -97,30 +170,30 @@ function ProductDetail() {
                         <h4 className="mb-5 mt-[30px] text-xl font-bold text-[--main-color] lg:mt-0">
                             Giới thiệu sách
                         </h4>
-                        <p>
-                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Maxime ut eligendi doloremque non
-                            minus tempore, facere eaque? Commodi officiis natus unde possimus adipisci ipsa. Error vero
-                            voluptates eligendi quasi doloribus.
-                        </p>
+                        <p className="whitespace-pre-line">{product.description}</p>
                     </div>
                     <div className="w-full px-2 lg:w-4/12">
                         <h4 className="mb-5 text-xl font-bold text-[--main-color]">Thông tin chi tiết</h4>
                         <ul className="list-disc rounded-md border border-solid border-gray-200 p-4">
                             <li className="mb-3 flex pl-3 last:mb-0">
                                 <span className="w-1/2">Tác giả</span>
-                                <span className="w-1/2 font-bold">Paulo Coelho</span>
+                                <span className="w-1/2 font-bold">{product.author}</span>
+                            </li>
+                            <li className="mb-3 flex pl-3 last:mb-0">
+                                <span className="w-1/2">Thể loại</span>
+                                <span className="w-1/2 font-bold">{product.genre}</span>
                             </li>
                             <li className="mb-3 flex pl-3 last:mb-0">
                                 <span className="w-1/2">Nhà xuất bản</span>
-                                <span className="w-1/2 font-bold">Hội Nhà Văn</span>
+                                <span className="w-1/2 font-bold">{product.publisher}</span>
                             </li>
                             <li className="mb-3 flex pl-3 last:mb-0">
                                 <span className="w-1/2">Số trang</span>
-                                <span className="w-1/2 font-bold">222</span>
+                                <span className="w-1/2 font-bold">{product.numberOfPage}</span>
                             </li>
                             <li className="mb-3 flex pl-3 last:mb-0">
-                                <span className="w-1/2">Ngày phát hành</span>
-                                <span className="w-1/2 font-bold">2024</span>
+                                <span className="w-1/2">Năm phát hành</span>
+                                <span className="w-1/2 font-bold">{product.published}</span>
                             </li>
                         </ul>
                     </div>
@@ -128,220 +201,50 @@ function ProductDetail() {
                 <div className="mb-[30px] w-full max-w-7xl px-2">
                     <div className="mb-6 flex items-center justify-between border-t-2 border-solid border-[--main-color] pt-3 ">
                         <h2 className="text-xl font-bold text-[--main-color] md:text-2xl">
-                            <a href="#">Có thể bạn cũng thích</a>
+                            <Link to="/products/genre/tat-ca">Có thể bạn cũng thích</Link>
                         </h2>
-                        <a className="hidden font-bold text-[--main-color] md:inline-block" href="#">
+                        <Link
+                            to="/products/genre/tat-ca"
+                            className="hidden font-bold text-[--main-color] md:inline-block"
+                        >
                             Xem thêm <ArrowRightCircleIcon className="inline-block h-8 w-8" />
-                        </a>
+                        </Link>
                     </div>
                     <Swiper slidesPerView={'auto'} navigation={true} modules={[Navigation]} className="mySwiper">
-                        <SwiperSlide className="w-item-prod-home-ssm sm:w-item-prod-home-sm lg:w-[252px!important]">
-                            <div className="inline-flex flex-col items-center">
-                                <a href="#" className="group/product-image relative inline-block overflow-hidden">
-                                    <img src={BookImage} alt="image" className="inline-block w-full" />
-                                    <div className="absolute bottom-[-100%] hidden w-full px-8 transition-all duration-200 group-hover/product-image:bottom-0 md:flex">
-                                        <button className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-md border border-solid border-[--main-color] bg-[#f5f5f5] text-[--main-color] hover:bg-[--main-color] hover:text-white">
-                                            <ShoppingCartIcon className="h-4 w-4" />
-                                        </button>
-                                        <button className="ml-1 flex h-12 w-full flex-1 items-center justify-center rounded-md border border-solid border-[--main-color] bg-[--main-color] font-bold text-white hover:bg-[#f5f5f5] hover:text-[--main-color]">
-                                            Mua ngay
-                                        </button>
+                        {products.map((book) => (
+                            <SwiperSlide className="w-item-prod-home-ssm sm:w-item-prod-home-sm lg:w-[252px!important]">
+                                <div className="inline-flex flex-col items-center">
+                                    <Link
+                                        to={`/product-detail/${book.id}`}
+                                        className="group/product-image relative inline-block overflow-hidden"
+                                    >
+                                        <img
+                                            src={book.image || BookImage}
+                                            alt={book.name}
+                                            className="inline-block w-full"
+                                        />
+                                        <div className="absolute bottom-[-100%] hidden w-full px-8 transition-all duration-200 group-hover/product-image:bottom-0 md:flex">
+                                            <button className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-md border border-solid border-[--main-color] bg-[#f5f5f5] text-[--main-color] hover:bg-[--main-color] hover:text-white">
+                                                <ShoppingCartIcon className="h-4 w-4" />
+                                            </button>
+                                            <button className="ml-1 flex h-12 w-full flex-1 items-center justify-center rounded-md border border-solid border-[--main-color] bg-[--main-color] font-bold text-white hover:bg-[#f5f5f5] hover:text-[--main-color]">
+                                                Mua ngay
+                                            </button>
+                                        </div>
+                                    </Link>
+                                    <div className="flex max-w-[160px] flex-col p-2">
+                                        <Link to={`/product-detail/${book.id}`} className="inline-block">
+                                            <h3 className="line-clamp-2 text-center font-bold uppercase">
+                                                {book.name}
+                                            </h3>
+                                        </Link>
+                                        <span className="text-center font-bold text-[--main-color]">
+                                            {utils.formatNumber(book.price)}đ
+                                        </span>
                                     </div>
-                                </a>
-                                <div className="flex max-w-[160px] flex-col p-2">
-                                    <a href="#" className="inline-block">
-                                        <h3 className="line-clamp-2 text-center font-bold uppercase">
-                                            Nhà Giả Kim Nhà Giả Kim Nhà Giả Kim Nhà Giả Kim
-                                        </h3>
-                                    </a>
-                                    <span className="text-center font-bold text-[--main-color]">89.000đ</span>
                                 </div>
-                            </div>
-                        </SwiperSlide>
-                        <SwiperSlide className="w-item-prod-home-ssm sm:w-item-prod-home-sm lg:w-[252px!important]">
-                            <div className="inline-flex flex-col items-center">
-                                <a href="#" className="group/product-image relative inline-block overflow-hidden">
-                                    <img src={BookImage} alt="image" className="inline-block w-full" />
-                                    <div className="absolute bottom-[-100%] hidden w-full px-8 transition-all duration-200 group-hover/product-image:bottom-0 md:flex">
-                                        <button className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-md border border-solid border-[--main-color] bg-[#f5f5f5] text-[--main-color] hover:bg-[--main-color] hover:text-white">
-                                            <ShoppingCartIcon className="h-4 w-4" />
-                                        </button>
-                                        <button className="ml-1 flex h-12 w-full flex-1 items-center justify-center rounded-md border border-solid border-[--main-color] bg-[--main-color] font-bold text-white hover:bg-[#f5f5f5] hover:text-[--main-color]">
-                                            Mua ngay
-                                        </button>
-                                    </div>
-                                </a>
-                                <div className="flex max-w-[160px] flex-col p-2">
-                                    <a href="#" className="inline-block">
-                                        <h3 className="line-clamp-2 text-center font-bold uppercase">
-                                            Nhà Giả Kim Nhà Giả Kim Nhà Giả Kim Nhà Giả Kim
-                                        </h3>
-                                    </a>
-                                    <span className="text-center font-bold text-[--main-color]">89.000đ</span>
-                                </div>
-                            </div>
-                        </SwiperSlide>
-                        <SwiperSlide className="w-item-prod-home-ssm sm:w-item-prod-home-sm lg:w-[252px!important]">
-                            <div className="inline-flex flex-col items-center">
-                                <a href="#" className="group/product-image relative inline-block overflow-hidden">
-                                    <img src={BookImage} alt="image" className="inline-block w-full" />
-                                    <div className="absolute bottom-[-100%] hidden w-full px-8 transition-all duration-200 group-hover/product-image:bottom-0 md:flex">
-                                        <button className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-md border border-solid border-[--main-color] bg-[#f5f5f5] text-[--main-color] hover:bg-[--main-color] hover:text-white">
-                                            <ShoppingCartIcon className="h-4 w-4" />
-                                        </button>
-                                        <button className="ml-1 flex h-12 w-full flex-1 items-center justify-center rounded-md border border-solid border-[--main-color] bg-[--main-color] font-bold text-white hover:bg-[#f5f5f5] hover:text-[--main-color]">
-                                            Mua ngay
-                                        </button>
-                                    </div>
-                                </a>
-                                <div className="flex max-w-[160px] flex-col p-2">
-                                    <a href="#" className="inline-block">
-                                        <h3 className="line-clamp-2 text-center font-bold uppercase">
-                                            Nhà Giả Kim Nhà Giả Kim Nhà Giả Kim Nhà Giả Kim
-                                        </h3>
-                                    </a>
-                                    <span className="text-center font-bold text-[--main-color]">89.000đ</span>
-                                </div>
-                            </div>
-                        </SwiperSlide>
-                        <SwiperSlide className="w-item-prod-home-ssm sm:w-item-prod-home-sm lg:w-[252px!important]">
-                            <div className="inline-flex flex-col items-center">
-                                <a href="#" className="group/product-image relative inline-block overflow-hidden">
-                                    <img src={BookImage} alt="image" className="inline-block w-full" />
-                                    <div className="absolute bottom-[-100%] hidden w-full px-8 transition-all duration-200 group-hover/product-image:bottom-0 md:flex">
-                                        <button className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-md border border-solid border-[--main-color] bg-[#f5f5f5] text-[--main-color] hover:bg-[--main-color] hover:text-white">
-                                            <ShoppingCartIcon className="h-4 w-4" />
-                                        </button>
-                                        <button className="ml-1 flex h-12 w-full flex-1 items-center justify-center rounded-md border border-solid border-[--main-color] bg-[--main-color] font-bold text-white hover:bg-[#f5f5f5] hover:text-[--main-color]">
-                                            Mua ngay
-                                        </button>
-                                    </div>
-                                </a>
-                                <div className="flex max-w-[160px] flex-col p-2">
-                                    <a href="#" className="inline-block">
-                                        <h3 className="line-clamp-2 text-center font-bold uppercase">
-                                            Nhà Giả Kim Nhà Giả Kim Nhà Giả Kim Nhà Giả Kim
-                                        </h3>
-                                    </a>
-                                    <span className="text-center font-bold text-[--main-color]">89.000đ</span>
-                                </div>
-                            </div>
-                        </SwiperSlide>
-                        <SwiperSlide className="w-item-prod-home-ssm sm:w-item-prod-home-sm lg:w-[252px!important]">
-                            <div className="inline-flex flex-col items-center">
-                                <a href="#" className="group/product-image relative inline-block overflow-hidden">
-                                    <img src={BookImage} alt="image" className="inline-block w-full" />
-                                    <div className="absolute bottom-[-100%] hidden w-full px-8 transition-all duration-200 group-hover/product-image:bottom-0 md:flex">
-                                        <button className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-md border border-solid border-[--main-color] bg-[#f5f5f5] text-[--main-color] hover:bg-[--main-color] hover:text-white">
-                                            <ShoppingCartIcon className="h-4 w-4" />
-                                        </button>
-                                        <button className="ml-1 flex h-12 w-full flex-1 items-center justify-center rounded-md border border-solid border-[--main-color] bg-[--main-color] font-bold text-white hover:bg-[#f5f5f5] hover:text-[--main-color]">
-                                            Mua ngay
-                                        </button>
-                                    </div>
-                                </a>
-                                <div className="flex max-w-[160px] flex-col p-2">
-                                    <a href="#" className="inline-block">
-                                        <h3 className="line-clamp-2 text-center font-bold uppercase">
-                                            Nhà Giả Kim Nhà Giả Kim Nhà Giả Kim Nhà Giả Kim
-                                        </h3>
-                                    </a>
-                                    <span className="text-center font-bold text-[--main-color]">89.000đ</span>
-                                </div>
-                            </div>
-                        </SwiperSlide>
-                        <SwiperSlide className="w-item-prod-home-ssm sm:w-item-prod-home-sm lg:w-[252px!important]">
-                            <div className="inline-flex flex-col items-center">
-                                <a href="#" className="group/product-image relative inline-block overflow-hidden">
-                                    <img src={BookImage} alt="image" className="inline-block w-full" />
-                                    <div className="absolute bottom-[-100%] hidden w-full px-8 transition-all duration-200 group-hover/product-image:bottom-0 md:flex">
-                                        <button className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-md border border-solid border-[--main-color] bg-[#f5f5f5] text-[--main-color] hover:bg-[--main-color] hover:text-white">
-                                            <ShoppingCartIcon className="h-4 w-4" />
-                                        </button>
-                                        <button className="ml-1 flex h-12 w-full flex-1 items-center justify-center rounded-md border border-solid border-[--main-color] bg-[--main-color] font-bold text-white hover:bg-[#f5f5f5] hover:text-[--main-color]">
-                                            Mua ngay
-                                        </button>
-                                    </div>
-                                </a>
-                                <div className="flex max-w-[160px] flex-col p-2">
-                                    <a href="#" className="inline-block">
-                                        <h3 className="line-clamp-2 text-center font-bold uppercase">
-                                            Nhà Giả Kim Nhà Giả Kim Nhà Giả Kim Nhà Giả Kim
-                                        </h3>
-                                    </a>
-                                    <span className="text-center font-bold text-[--main-color]">89.000đ</span>
-                                </div>
-                            </div>
-                        </SwiperSlide>
-                        <SwiperSlide className="w-item-prod-home-ssm sm:w-item-prod-home-sm lg:w-[252px!important]">
-                            <div className="inline-flex flex-col items-center">
-                                <a href="#" className="group/product-image relative inline-block overflow-hidden">
-                                    <img src={BookImage} alt="image" className="inline-block w-full" />
-                                    <div className="absolute bottom-[-100%] hidden w-full px-8 transition-all duration-200 group-hover/product-image:bottom-0 md:flex">
-                                        <button className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-md border border-solid border-[--main-color] bg-[#f5f5f5] text-[--main-color] hover:bg-[--main-color] hover:text-white">
-                                            <ShoppingCartIcon className="h-4 w-4" />
-                                        </button>
-                                        <button className="ml-1 flex h-12 w-full flex-1 items-center justify-center rounded-md border border-solid border-[--main-color] bg-[--main-color] font-bold text-white hover:bg-[#f5f5f5] hover:text-[--main-color]">
-                                            Mua ngay
-                                        </button>
-                                    </div>
-                                </a>
-                                <div className="flex max-w-[160px] flex-col p-2">
-                                    <a href="#" className="inline-block">
-                                        <h3 className="line-clamp-2 text-center font-bold uppercase">
-                                            Nhà Giả Kim Nhà Giả Kim Nhà Giả Kim Nhà Giả Kim
-                                        </h3>
-                                    </a>
-                                    <span className="text-center font-bold text-[--main-color]">89.000đ</span>
-                                </div>
-                            </div>
-                        </SwiperSlide>
-                        <SwiperSlide className="w-item-prod-home-ssm sm:w-item-prod-home-sm lg:w-[252px!important]">
-                            <div className="inline-flex flex-col items-center">
-                                <a href="#" className="group/product-image relative inline-block overflow-hidden">
-                                    <img src={BookImage} alt="image" className="inline-block w-full" />
-                                    <div className="absolute bottom-[-100%] hidden w-full px-8 transition-all duration-200 group-hover/product-image:bottom-0 md:flex">
-                                        <button className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-md border border-solid border-[--main-color] bg-[#f5f5f5] text-[--main-color] hover:bg-[--main-color] hover:text-white">
-                                            <ShoppingCartIcon className="h-4 w-4" />
-                                        </button>
-                                        <button className="ml-1 flex h-12 w-full flex-1 items-center justify-center rounded-md border border-solid border-[--main-color] bg-[--main-color] font-bold text-white hover:bg-[#f5f5f5] hover:text-[--main-color]">
-                                            Mua ngay
-                                        </button>
-                                    </div>
-                                </a>
-                                <div className="flex max-w-[160px] flex-col p-2">
-                                    <a href="#" className="inline-block">
-                                        <h3 className="line-clamp-2 text-center font-bold uppercase">
-                                            Nhà Giả Kim Nhà Giả Kim Nhà Giả Kim Nhà Giả Kim
-                                        </h3>
-                                    </a>
-                                    <span className="text-center font-bold text-[--main-color]">89.000đ</span>
-                                </div>
-                            </div>
-                        </SwiperSlide>
-                        <SwiperSlide className="w-item-prod-home-ssm sm:w-item-prod-home-sm lg:w-[252px!important]">
-                            <div className="inline-flex flex-col items-center">
-                                <a href="#" className="group/product-image relative inline-block overflow-hidden">
-                                    <img src={BookImage} alt="image" className="inline-block w-full" />
-                                    <div className="absolute bottom-[-100%] hidden w-full px-8 transition-all duration-200 group-hover/product-image:bottom-0 md:flex">
-                                        <button className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-md border border-solid border-[--main-color] bg-[#f5f5f5] text-[--main-color] hover:bg-[--main-color] hover:text-white">
-                                            <ShoppingCartIcon className="h-4 w-4" />
-                                        </button>
-                                        <button className="ml-1 flex h-12 w-full flex-1 items-center justify-center rounded-md border border-solid border-[--main-color] bg-[--main-color] font-bold text-white hover:bg-[#f5f5f5] hover:text-[--main-color]">
-                                            Mua ngay
-                                        </button>
-                                    </div>
-                                </a>
-                                <div className="flex max-w-[160px] flex-col p-2">
-                                    <a href="#" className="inline-block">
-                                        <h3 className="line-clamp-2 text-center font-bold uppercase">
-                                            Nhà Giả Kim Nhà Giả Kim Nhà Giả Kim Nhà Giả Kim
-                                        </h3>
-                                    </a>
-                                    <span className="text-center font-bold text-[--main-color]">89.000đ</span>
-                                </div>
-                            </div>
-                        </SwiperSlide>
+                            </SwiperSlide>
+                        ))}
                     </Swiper>
                 </div>
             </div>

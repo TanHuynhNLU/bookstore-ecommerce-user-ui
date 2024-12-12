@@ -24,6 +24,7 @@ function Products() {
         '-id': 'Sách mới',
         price: 'Giá thấp - cao',
         '-price': 'Giá cao - thấp',
+        '-sales': 'Bán chạy',
     };
     const [filters, setFilters] = useState({
         genres: paramsMapping[genre],
@@ -361,6 +362,12 @@ function Products() {
                                 >
                                     Giá cao - thấp
                                 </button>
+                                <button
+                                    onClick={(e) => setFilters({ ...filters, sort: '-sales' })}
+                                    className={`ml-2 rounded-md ${filters.sort === '-sales' ? 'bg-[#7B7B7D] text-white' : 'bg-white text-[#2E3A59]'} p-2 hover:bg-[#7B7B7D] hover:text-white`}
+                                >
+                                    Bán chạy
+                                </button>
                             </div>
                             <ul className="absolute top-full z-[1] hidden w-[210px] overflow-hidden rounded-md border border-solid border-gray-200 bg-white shadow-md group-hover/sort:block group-hover/sort:md:hidden">
                                 <li
@@ -387,15 +394,24 @@ function Products() {
                                 >
                                     Giá cao - thấp
                                 </li>
+                                <li
+                                    onClick={(e) => setFilters({ ...filters, sort: '-sales' })}
+                                    className={`h-8 cursor-pointer rounded-md px-2 hover:bg-[#7B7B7D] hover:text-white ${filters.sort === '-sales' ? 'bg-[#7B7B7D] text-white' : 'bg-white text-black'}`}
+                                >
+                                    Bán chạy
+                                </li>
                             </ul>
                         </div>
                         <div className="flex flex-wrap">
                             {books.map((book) => (
                                 <div className="inline-flex w-1/2 flex-col items-center px-2 py-2 hover:shadow-md md:w-1/4">
-                                    <a href="#" className="group/product-image relative inline-block overflow-hidden">
+                                    <Link
+                                        to={`/product-detail/${book.id}`}
+                                        className="group/product-image relative inline-block overflow-hidden"
+                                    >
                                         <img
                                             src={book.image || BookImage}
-                                            alt="image"
+                                            alt={book.name}
                                             className="inline-block w-full scale-100 transform object-cover transition-transform duration-200 ease-in-out group-hover/product-image:scale-110"
                                         />
                                         <div className="absolute bottom-[-100%] flex w-full px-8 transition-all duration-200 group-hover/product-image:bottom-0">
@@ -406,13 +422,13 @@ function Products() {
                                                 Mua ngay
                                             </button>
                                         </div>
-                                    </a>
+                                    </Link>
                                     <div className="flex max-w-[160px] flex-col p-2">
-                                        <a href="#" className="inline-block">
+                                        <Link to={`/product-detail/${book.id}`} className="inline-block">
                                             <h3 className="line-clamp-2 text-center font-bold uppercase">
                                                 {book.name}
                                             </h3>
-                                        </a>
+                                        </Link>
                                         <span className="text-center font-bold text-[--main-color]">
                                             {utils.formatNumber(book.price)}đ
                                         </span>

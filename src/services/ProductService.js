@@ -51,3 +51,11 @@ export const getBooksPagAndSort = async ({ page = 0, size = 10, sort = 'id' }) =
         console.log(error);
     }
 };
+export const getBook = async (id) => {
+    try {
+        const res = request.get(`/books/${id}`);
+        return res;
+    } catch (error) {
+        console.log(error);
+    }
+};
