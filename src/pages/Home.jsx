@@ -12,12 +12,29 @@ import Banner3 from '~/assets/imgs/banner3.jpg';
 import Banner4 from '~/assets/imgs/banner4.jpg';
 import * as productService from '~/services/ProductService';
 import * as utils from '~/utils/utils';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { CartContext } from '~/context/CartContext';
+import { toast } from 'react-toastify';
 
 function Home() {
+    const { addToCart } = useContext(CartContext);
     const [bestSellers, setBestSellers] = useState([]);
     const [newBooks, setNewBooks] = useState([]);
+
+    const handleAddToCart = (product) => {
+        addToCart({ ...product, quantity: 1 });
+        toast.success('Thêm vào giỏ hàng thành công', {
+            position: 'top-right',
+            autoClose: 1000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: 'light',
+        });
+    };
 
     // Fetching best sellers and new books from API
     useEffect(() => {
@@ -158,23 +175,28 @@ function Home() {
                     </div>
                     <Swiper slidesPerView={'auto'} navigation={true} modules={[Navigation]} className="mySwiper">
                         {bestSellers.length !== 0 &&
-                            bestSellers.map((book) => (
-                                <SwiperSlide className="w-item-prod-home-ssm sm:w-item-prod-home-sm lg:w-[252px!important]">
+                            bestSellers.map((book, index) => (
+                                <SwiperSlide
+                                    key={index}
+                                    className="w-item-prod-home-ssm sm:w-item-prod-home-sm lg:w-[252px!important]"
+                                >
                                     <div className="z-[1] inline-flex flex-col items-center">
-                                        <Link
-                                            to={`/product-detail/${book.id}`}
-                                            className="group/product-image relative inline-block overflow-hidden"
-                                        >
-                                            <img src={book.image} alt={book.name} className="inline-block w-full" />
+                                        <div className="group/product-image relative inline-block overflow-hidden">
+                                            <Link to={`/product-detail/${book.id}`}>
+                                                <img src={book.image} alt={book.name} className="inline-block w-full" />
+                                            </Link>
                                             <div className="absolute bottom-[-100%] flex w-full px-8 transition-all duration-200 group-hover/product-image:bottom-0">
-                                                <button className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-md border border-solid border-[--main-color] bg-[#f5f5f5] text-[--main-color] hover:bg-[--main-color] hover:text-white">
+                                                <button
+                                                    onClick={() => handleAddToCart(book)}
+                                                    className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-md border border-solid border-[--main-color] bg-[#f5f5f5] text-[--main-color] hover:bg-[--main-color] hover:text-white"
+                                                >
                                                     <ShoppingCartIcon className="h-4 w-4" />
                                                 </button>
                                                 <button className="ml-1 flex h-12 w-full flex-1 items-center justify-center rounded-md border border-solid border-[--main-color] bg-[--main-color] font-bold text-white hover:bg-[#f5f5f5] hover:text-[--main-color]">
                                                     Mua ngay
                                                 </button>
                                             </div>
-                                        </Link>
+                                        </div>
                                         <div className="flex max-w-[160px] flex-col p-2">
                                             <Link
                                                 to={`/product-detail/${book.id}`}
@@ -212,23 +234,28 @@ function Home() {
                     </div>
                     <Swiper slidesPerView={'auto'} navigation={true} modules={[Navigation]} className="mySwiper">
                         {newBooks.length !== 0 &&
-                            newBooks.map((book) => (
-                                <SwiperSlide className="w-item-prod-home-ssm sm:w-item-prod-home-sm lg:w-[252px!important]">
+                            newBooks.map((book, index) => (
+                                <SwiperSlide
+                                    key={index}
+                                    className="w-item-prod-home-ssm sm:w-item-prod-home-sm lg:w-[252px!important]"
+                                >
                                     <div className="z-[1] inline-flex flex-col items-center">
-                                        <Link
-                                            to={`/product-detail/${book.id}`}
-                                            className="group/product-image relative inline-block overflow-hidden"
-                                        >
-                                            <img src={book.image} alt={book.name} className="inline-block w-full" />
+                                        <div className="group/product-image relative inline-block overflow-hidden">
+                                            <Link to={`/product-detail/${book.id}`}>
+                                                <img src={book.image} alt={book.name} className="inline-block w-full" />
+                                            </Link>
                                             <div className="absolute bottom-[-100%] flex w-full px-8 transition-all duration-200 group-hover/product-image:bottom-0">
-                                                <button className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-md border border-solid border-[--main-color] bg-[#f5f5f5] text-[--main-color] hover:bg-[--main-color] hover:text-white">
+                                                <button
+                                                    onClick={() => handleAddToCart(book)}
+                                                    className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-md border border-solid border-[--main-color] bg-[#f5f5f5] text-[--main-color] hover:bg-[--main-color] hover:text-white"
+                                                >
                                                     <ShoppingCartIcon className="h-4 w-4" />
                                                 </button>
                                                 <button className="ml-1 flex h-12 w-full flex-1 items-center justify-center rounded-md border border-solid border-[--main-color] bg-[--main-color] font-bold text-white hover:bg-[#f5f5f5] hover:text-[--main-color]">
                                                     Mua ngay
                                                 </button>
                                             </div>
-                                        </Link>
+                                        </div>
                                         <div className="flex max-w-[160px] flex-col p-2">
                                             <Link
                                                 to={`/product-detail/${book.id}`}

@@ -32,15 +32,18 @@ import lgShare from 'lightgallery/plugins/share';
 
 import BookImage from '~/assets/imgs/nha-gia-kim.jpg';
 import { Link, useParams } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import * as productService from '~/services/ProductService';
 import * as utils from '~/utils/utils';
+import { CartContext } from '~/context/CartContext';
+import { toast } from 'react-toastify';
 
 function ProductDetail() {
     let { productId } = useParams();
     const [product, setProduct] = useState({});
     const [products, setProducts] = useState([]);
     const [quantity, setQuantity] = useState(1);
+    const { addToCart } = useContext(CartContext);
 
     const urlMapping = {
         'Kỹ Năng Sống': 'ky-nang-song',
@@ -60,6 +63,20 @@ function ProductDetail() {
         if (quantity > 1) {
             setQuantity(quantity - 1);
         }
+    };
+
+    const handleAddToCart = () => {
+        addToCart({ ...product, quantity });
+        toast.success('Thêm vào giỏ hàng thành công', {
+            position: 'top-right',
+            autoClose: 1000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: 'light',
+        });
     };
 
     // Fetching product by id from API
@@ -156,7 +173,10 @@ function ProductDetail() {
                             </span>
                         </div>
                         <div className="mt-3 flex flex-col md:flex-row">
-                            <button className="flex h-[65px] w-full items-center justify-center rounded-md border border-solid border-[--main-color] px-3 py-[6px] text-xl font-bold text-[--main-color] hover:bg-[--main-color] hover:text-white md:w-[224px]">
+                            <button
+                                onClick={handleAddToCart}
+                                className="flex h-[65px] w-full items-center justify-center rounded-md border border-solid border-[--main-color] px-3 py-[6px] text-xl font-bold text-[--main-color] hover:bg-[--main-color] hover:text-white md:w-[224px]"
+                            >
                                 Thêm vào giỏ hàng
                             </button>
                             <button className="mt-3 flex h-[65px] w-full items-center justify-center rounded-md border border-solid border-[--main-color] bg-[--main-color] px-3 py-[6px] text-xl font-bold text-white hover:bg-white hover:text-[--main-color] md:ml-3 md:mt-0 md:w-[224px]">

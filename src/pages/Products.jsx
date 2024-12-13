@@ -1,13 +1,16 @@
 import { ChevronRightIcon, ShoppingCartIcon, Square3Stack3DIcon } from '@heroicons/react/24/outline';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import ReactPaginate from 'react-paginate';
 import { Link, NavLink, useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 import BookImage from '~/assets/imgs/nha-gia-kim.jpg';
+import { CartContext } from '~/context/CartContext';
 import * as productService from '~/services/ProductService';
 import * as utils from '~/utils/utils';
 
 function Products() {
+    const { addToCart } = useContext(CartContext);
     let { genre } = useParams();
 
     const paramsMapping = {
@@ -60,6 +63,20 @@ function Products() {
     // Invoke when user click to request another page.
     const handlePageClick = (event) => {
         setFilters({ ...filters, page: event.selected });
+    };
+
+    const handleAddToCart = (product) => {
+        addToCart({ ...product, quantity: 1 });
+        toast.success('Thêm vào giỏ hàng thành công', {
+            position: 'top-right',
+            autoClose: 1000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: 'light',
+        });
     };
 
     useEffect(() => {
@@ -405,24 +422,26 @@ function Products() {
                         <div className="flex flex-wrap">
                             {books.map((book) => (
                                 <div className="inline-flex w-1/2 flex-col items-center px-2 py-2 hover:shadow-md md:w-1/4">
-                                    <Link
-                                        to={`/product-detail/${book.id}`}
-                                        className="group/product-image relative inline-block overflow-hidden"
-                                    >
-                                        <img
-                                            src={book.image || BookImage}
-                                            alt={book.name}
-                                            className="inline-block w-full scale-100 transform object-cover transition-transform duration-200 ease-in-out group-hover/product-image:scale-110"
-                                        />
-                                        <div className="absolute bottom-[-100%] flex w-full px-8 transition-all duration-200 group-hover/product-image:bottom-0">
-                                            <button className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-md border border-solid border-[--main-color] bg-[#f5f5f5] text-[--main-color] hover:bg-[--main-color] hover:text-white">
+                                    <div className="group/product-image relative inline-block overflow-hidden">
+                                        <Link to={`/product-detail/${book.id}`}>
+                                            <img
+                                                src={book.image || BookImage}
+                                                alt={book.name}
+                                                className="inline-block w-full scale-100 transform object-cover transition-transform duration-200 ease-in-out group-hover/product-image:scale-110"
+                                            />
+                                        </Link>
+                                        <div className="absolute bottom-[-100%] z-[5] flex w-full px-8 transition-all duration-200 group-hover/product-image:bottom-0">
+                                            <button
+                                                onClick={() => handleAddToCart(book)}
+                                                className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-md border border-solid border-[--main-color] bg-[#f5f5f5] text-[--main-color] hover:bg-[--main-color] hover:text-white"
+                                            >
                                                 <ShoppingCartIcon className="h-4 w-4" />
                                             </button>
                                             <button className="ml-1 flex h-12 w-full flex-1 items-center justify-center rounded-md border border-solid border-[--main-color] bg-[--main-color] font-bold text-white hover:bg-[#f5f5f5] hover:text-[--main-color]">
                                                 Mua ngay
                                             </button>
                                         </div>
-                                    </Link>
+                                    </div>
                                     <div className="flex max-w-[160px] flex-col p-2">
                                         <Link to={`/product-detail/${book.id}`} className="inline-block">
                                             <h3 className="line-clamp-2 text-center font-bold uppercase">

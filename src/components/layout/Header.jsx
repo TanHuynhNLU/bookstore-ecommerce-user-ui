@@ -2,18 +2,21 @@ import {
     Bars3Icon,
     ChevronDownIcon,
     MagnifyingGlassIcon,
-    ShoppingBagIcon,
     ShoppingCartIcon,
     UserCircleIcon,
     UserIcon,
 } from '@heroicons/react/24/outline';
+import { useContext, useState } from 'react';
+import { Link } from 'react-router-dom';
+
 import ProductImage from '~/assets/imgs/nha-gia-kim.jpg';
 import Logo from '~/assets/imgs/logo.png';
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { CartContext } from '~/context/CartContext';
+import * as utils from '~/utils/utils';
 
 function Header() {
     const [showMobileMenu, setShowMobileMenu] = useState(false);
+    const { cartItems, getCartTotal } = useContext(CartContext);
 
     return (
         <header className="fixed top-0 z-10 flex h-[--header-height] w-full items-center justify-center border-b-[2px] border-solid border-[--main-color] bg-white text-[--text-color]">
@@ -125,83 +128,55 @@ function Header() {
                             <ShoppingCartIcon className="inline-block h-6 w-6" />
                             <span className="hidden font-bold lg:inline-block">Giỏ hàng</span>
                         </Link>
-                        <span className="absolute bottom-6 right-1 inline-flex h-[20px] w-[20px] items-center justify-center overflow-hidden rounded-full bg-[--main-color] p-[2px] text-center text-[12px] leading-3 text-white lg:right-4 lg:top-4">
-                            1
-                        </span>
-                        <div className="absolute right-0 top-full hidden max-h-[50vh] min-w-[360px] rounded-md bg-white shadow-nav-popup before:absolute before:-top-3 before:right-[32px] before:block before:h-6 before:w-6 before:rotate-45 before:bg-white lg:group-hover/cart:inline-block 2xl:-left-[138px] 2xl:right-auto 2xl:before:left-[170px]">
-                            <div className="flex items-center border-b border-solid border-gray-200 p-4">
-                                <ShoppingCartIcon className="inline-block h-4 w-4" />
-                                <span className="ml-2 text-base font-bold">Giỏ hàng (1)</span>
-                            </div>
-                            <ul className="flex max-h-items-cart-header w-full flex-1 flex-col overflow-y-scroll">
-                                <li className="cursor-pointer px-4 py-3 hover:text-[--main-color]">
-                                    <a className="flex" href="#">
-                                        <img className="inline-block w-[68px]" src={ProductImage} alt="nha-gia-kim" />
-                                        <div className="flex flex-col">
-                                            <h5 className="text-base">Nhà Giả Kim</h5>
-                                            <span className="font-bold">75.000 đ x1</span>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li className="cursor-pointer px-4 py-3 hover:text-[--main-color]">
-                                    <a className="flex" href="#">
-                                        <img className="inline-block w-[68px]" src={ProductImage} alt="nha-gia-kim" />
-                                        <div className="flex flex-col">
-                                            <h5 className="text-base">Nhà Giả Kim</h5>
-                                            <span className="font-bold">75.000 đ x1</span>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li className="cursor-pointer px-4 py-3 hover:text-[--main-color]">
-                                    <a className="flex" href="#">
-                                        <img className="inline-block w-[68px]" src={ProductImage} alt="nha-gia-kim" />
-                                        <div className="flex flex-col">
-                                            <h5 className="text-base">Nhà Giả Kim</h5>
-                                            <span className="font-bold">75.000 đ x1</span>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li className="cursor-pointer px-4 py-3 hover:text-[--main-color]">
-                                    <a className="flex" href="#">
-                                        <img className="inline-block w-[68px]" src={ProductImage} alt="nha-gia-kim" />
-                                        <div className="flex flex-col">
-                                            <h5 className="text-base">Nhà Giả Kim</h5>
-                                            <span className="font-bold">75.000 đ x1</span>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li className="cursor-pointer px-4 py-3 hover:text-[--main-color]">
-                                    <a className="flex" href="#">
-                                        <img className="inline-block w-[68px]" src={ProductImage} alt="nha-gia-kim" />
-                                        <div className="flex flex-col">
-                                            <h5 className="text-base">Nhà Giả Kim</h5>
-                                            <span className="font-bold">75.000 đ x1</span>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li className="cursor-pointer px-4 py-3 hover:text-[--main-color]">
-                                    <a className="flex" href="#">
-                                        <img className="inline-block w-[68px]" src={ProductImage} alt="nha-gia-kim" />
-                                        <div className="flex flex-col">
-                                            <h5 className="text-base">Nhà Giả Kim</h5>
-                                            <span className="font-bold">75.000 đ x1</span>
-                                        </div>
-                                    </a>
-                                </li>
-                            </ul>
-                            <div className="flex items-center justify-between border-t border-solid border-gray-200 p-4">
-                                <div className="flex flex-col">
-                                    <span>Tổng cộng</span>
-                                    <span className="font-bold text-[--main-color]">75.000đ</span>
+                        {cartItems.length !== 0 && (
+                            <span className="absolute bottom-6 right-1 inline-flex h-[20px] w-[20px] items-center justify-center overflow-hidden rounded-full bg-[--main-color] p-[2px] text-center text-[12px] leading-3 text-white lg:right-4 lg:top-4">
+                                {cartItems.length}
+                            </span>
+                        )}
+                        {cartItems.length !== 0 && (
+                            <div className="absolute right-0 top-full hidden max-h-[50vh] min-w-[360px] rounded-md bg-white shadow-nav-popup before:absolute before:-top-3 before:right-[32px] before:block before:h-6 before:w-6 before:rotate-45 before:bg-white lg:group-hover/cart:inline-block 2xl:-left-[138px] 2xl:right-auto 2xl:before:left-[170px]">
+                                <div className="flex items-center border-b border-solid border-gray-200 p-4">
+                                    <ShoppingCartIcon className="inline-block h-4 w-4" />
+                                    <span className="ml-2 text-base font-bold">Giỏ hàng {`(${cartItems.length})`}</span>
                                 </div>
-                                <Link
-                                    to="/cart"
-                                    className="flex w-[186px] shrink-0 items-center justify-center rounded-md bg-[--main-color] px-6 py-3 font-bold text-white"
-                                >
-                                    Xem giỏ hàng
-                                </Link>
+                                <ul className="flex max-h-items-cart-header w-full flex-1 flex-col overflow-y-scroll">
+                                    {cartItems.map((cartItem) => (
+                                        <li
+                                            key={cartItem.id}
+                                            className="cursor-pointer px-4 py-3 hover:text-[--main-color]"
+                                        >
+                                            <span className="flex">
+                                                <img
+                                                    className="inline-block w-[68px]"
+                                                    src={cartItem.image || ProductImage}
+                                                    alt={cartItem.name}
+                                                />
+                                                <div className="flex flex-col">
+                                                    <h5 className="text-base">{cartItem.name}</h5>
+                                                    <span className="font-bold">
+                                                        {utils.formatNumber(cartItem.price)}đ x{cartItem.quantity}
+                                                    </span>
+                                                </div>
+                                            </span>
+                                        </li>
+                                    ))}
+                                </ul>
+                                <div className="flex items-center justify-between border-t border-solid border-gray-200 p-4">
+                                    <div className="flex flex-col">
+                                        <span>Tổng cộng</span>
+                                        <span className="font-bold text-[--main-color]">
+                                            {utils.formatNumber(getCartTotal())}đ
+                                        </span>
+                                    </div>
+                                    <Link
+                                        to="/cart"
+                                        className="flex w-[186px] shrink-0 items-center justify-center rounded-md bg-[--main-color] px-6 py-3 font-bold text-white"
+                                    >
+                                        Xem giỏ hàng
+                                    </Link>
+                                </div>
                             </div>
-                        </div>
+                        )}
                     </div>
                 </div>
             </div>
