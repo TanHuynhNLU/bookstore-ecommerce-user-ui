@@ -1,12 +1,18 @@
 import { ArrowLeftIcon, CurrencyDollarIcon, UserCircleIcon } from '@heroicons/react/24/outline';
 import Select from 'react-select';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 
 import Logo from '~/assets/imgs/logo.png';
 import { cities } from '~/data/AddressVn';
 import BookImage from '~/assets/imgs/nha-gia-kim.jpg';
 import { Link } from 'react-router-dom';
+import { CartContext } from '~/context/CartContext';
+import * as utils from '~/utils/utils';
 function Checkout() {
+    const shippingTax = 40000;
+    const [formData, setFormData] = useState({ email: '', fullName: '', phone: '', hamlet: '', note: '' });
+    const [errors, setErrors] = useState([]);
+    const { cartItems, getCartTotal, removeFromCart, increaseQuantity, decreaseQuantity } = useContext(CartContext);
     const [city, setCity] = useState();
     const [cityOptions, setCityOptions] = useState([]);
     const [districtOptions, setDistrictOptions] = useState([]);
@@ -30,6 +36,59 @@ function Checkout() {
                 borderColor: '#228b22', // Optional: Border color on hover
             },
         }),
+    };
+
+    const handleOnChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({ ...formData, [name]: value });
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        if (validate()) {
+            console.log('Form Data:', formData);
+            // Reset form or perform additional actions
+        }
+    };
+
+    const validate = () => {
+        const newErrors = {};
+
+        // Validate full name
+        if (!formData.fullName.trim()) {
+            newErrors.fullName = 'Nhập Họ tên';
+        }
+
+        // Validate City
+        if (!city) {
+            newErrors.city = 'Chọn Tỉnh/Thành phố';
+        }
+
+        // Validate District
+        if (!district) {
+            newErrors.district = 'Chọn Quận/Huyện';
+        }
+
+        // Validate Ward
+        if (!ward) {
+            newErrors.ward = 'Chọn Phường/Xã';
+        }
+
+        // Validate Email
+        if (formData.email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+            newErrors.email = 'Email không hợp lệ';
+        }
+
+        // Validate Phone
+        if (!formData.phone.trim()) {
+            newErrors.phone = 'Nhập số điện thoại';
+        } else if (!/^[0-9]{10}$/.test(formData.phone)) {
+            newErrors.phone = 'Số điện thoại không hợp lệ';
+        }
+
+        setErrors(newErrors);
+
+        return Object.keys(newErrors).length === 0; // No errors if object is empty
     };
 
     useEffect(() => {
@@ -90,8 +149,10 @@ function Checkout() {
                                     <input
                                         type="text"
                                         id="email"
+                                        name="email"
                                         className="peer block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-transparent px-2.5 pb-2.5 pt-3 text-sm text-gray-900 focus:border-[--main-color] focus:outline-none focus:ring-0 dark:border-gray-600 dark:text-white dark:focus:border-[--main-color]"
                                         placeholder=" "
+                                        onChange={handleOnChange}
                                     />
                                     <label
                                         htmlFor="email"
@@ -100,26 +161,32 @@ function Checkout() {
                                         Email
                                     </label>
                                 </div>
+                                {errors.email && <span className="text-red-500">{errors.email}</span>}
                                 <div className="relative py-[6px]">
                                     <input
                                         type="text"
-                                        id="fullname"
+                                        id="fullName"
+                                        name="fullName"
                                         className="peer block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-transparent px-2.5 pb-2.5 pt-3 text-sm text-gray-900 focus:border-[--main-color] focus:outline-none focus:ring-0 dark:border-gray-600 dark:text-white dark:focus:border-[--main-color]"
                                         placeholder=" "
+                                        onChange={handleOnChange}
                                     />
                                     <label
-                                        htmlFor="fullname"
+                                        htmlFor="fullName"
                                         className="absolute start-1 top-2 z-10 origin-[0] -translate-y-3 scale-75 transform bg-white px-2 text-sm text-gray-500 duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-3 peer-focus:scale-75 peer-focus:px-2 peer-focus:text-[--main-color] rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:bg-gray-900 dark:text-gray-400 peer-focus:dark:text-[--main-color]"
                                     >
                                         Họ tên (*)
                                     </label>
                                 </div>
+                                {errors.fullName && <span className="text-red-500">{errors.fullName}</span>}
                                 <div className="relative py-[6px]">
                                     <input
                                         type="text"
                                         id="phone"
+                                        name="phone"
                                         className="peer block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-transparent px-2.5 pb-2.5 pt-3 text-sm text-gray-900 focus:border-[--main-color] focus:outline-none focus:ring-0 dark:border-gray-600 dark:text-white dark:focus:border-[--main-color]"
                                         placeholder=" "
+                                        onChange={handleOnChange}
                                     />
                                     <label
                                         htmlFor="phone"
@@ -128,19 +195,20 @@ function Checkout() {
                                         Số điện thoại (*)
                                     </label>
                                 </div>
-
+                                {errors.phone && <span className="text-red-500">{errors.phone}</span>}
                                 <div className="py-1.5">
                                     <Select
-                                        placeholder="Tỉnh thành (*)"
+                                        placeholder="Tỉnh/Thành phố (*)"
                                         styles={customStyles}
                                         options={cityOptions}
                                         onChange={(option) => setCity(option)}
                                         value={city}
                                     />
                                 </div>
+                                {errors.city && <span className="text-red-500">{errors.city}</span>}
                                 <div className="py-1.5">
                                     <Select
-                                        placeholder="Quận huyện (*)"
+                                        placeholder="Quận/Huyện (*)"
                                         styles={customStyles}
                                         options={districtOptions}
                                         onChange={(option) => setDistrict(option)}
@@ -148,9 +216,10 @@ function Checkout() {
                                         isDisabled={!city}
                                     />
                                 </div>
+                                {errors.district && <span className="text-red-500">{errors.district}</span>}
                                 <div className="py-1.5">
                                     <Select
-                                        placeholder="Phường xã (*)"
+                                        placeholder="Phường/Xã (*)"
                                         styles={customStyles}
                                         options={wardOptions}
                                         onChange={(option) => setWard(option)}
@@ -158,15 +227,18 @@ function Checkout() {
                                         isDisabled={!district}
                                     />
                                 </div>
+                                {errors.ward && <span className="text-red-500">{errors.ward}</span>}
                                 <div className="relative py-[6px]">
                                     <input
                                         type="text"
-                                        id="address"
+                                        id="hamlet"
+                                        name="hamlet"
                                         className="peer block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-transparent px-2.5 pb-2.5 pt-3 text-sm text-gray-900 focus:border-[--main-color] focus:outline-none focus:ring-0 dark:border-gray-600 dark:text-white dark:focus:border-[--main-color]"
                                         placeholder=" "
+                                        onChange={handleOnChange}
                                     />
                                     <label
-                                        htmlFor="address"
+                                        htmlFor="hamlet"
                                         className="absolute start-1 top-2 z-0 origin-[0] -translate-y-3 scale-75 transform bg-white px-2 text-sm text-gray-500 duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-3 peer-focus:scale-75 peer-focus:px-2 peer-focus:text-[--main-color] rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:bg-gray-900 dark:text-gray-400 peer-focus:dark:text-[--main-color]"
                                     >
                                         Số nhà, ấp
@@ -176,8 +248,10 @@ function Checkout() {
                                     <textarea
                                         type="text"
                                         id="note"
+                                        name="note"
                                         className="peer block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-transparent px-2.5 pb-2.5 pt-3 text-sm text-gray-900 focus:border-[--main-color] focus:outline-none focus:ring-0 dark:border-gray-600 dark:text-white dark:focus:border-[--main-color]"
                                         placeholder=""
+                                        onChange={handleOnChange}
                                     />
                                     <label
                                         htmlFor="note"
@@ -204,7 +278,7 @@ function Checkout() {
                                             htmlFor="shippingMethod"
                                         >
                                             <span>Giao hàng tận nơi</span>
-                                            <span>40.000₫</span>
+                                            <span>{utils.formatNumber(shippingTax)}₫</span>
                                         </label>
                                     </div>
                                 </div>
@@ -230,7 +304,10 @@ function Checkout() {
                                 </div>
                             </div>
                             <div className="mt-3 flex w-full flex-col items-center lg:hidden">
-                                <button className="w-full rounded-md bg-[--main-color] px-6 py-3 text-white hover:opacity-80">
+                                <button
+                                    onClick={handleSubmit}
+                                    className="w-full rounded-md bg-[--main-color] px-6 py-3 text-white hover:opacity-80"
+                                >
                                     ĐẶT HÀNG
                                 </button>
                                 <Link
@@ -246,52 +323,62 @@ function Checkout() {
                 </div>
                 <div className="w-full border-b border-solid border-gray-300 lg:h-screen lg:w-[35%]">
                     <div className="flex justify-center border-b border-solid border-gray-300 p-6 text-xl font-bold lg:justify-start">
-                        <div className="w-full max-w-[560px]">Đơn hàng (3 sản phẩm)</div>
+                        <div className="w-full max-w-[560px]">Đơn hàng ({cartItems.length} sản phẩm)</div>
                     </div>
                     <div className="flex justify-center p-6 lg:justify-start">
                         <div className="w-full max-w-[560px]">
                             <ul className="border-b border-solid border-gray-300 py-1.5">
-                                <li className="flex py-1.5">
-                                    <div className="relative h-[50px] w-[50px]">
-                                        <img
-                                            src={BookImage}
-                                            alt="BookImage"
-                                            className="inline-block h-full w-full overflow-hidden rounded-sm border border-solid object-cover"
-                                        />
-                                        <span className="absolute right-0 top-0 inline-flex h-5 w-5 -translate-y-2.5 translate-x-2.5 items-center justify-center rounded-full bg-[--main-color] text-white">
-                                            3
-                                        </span>
-                                    </div>
-                                    <div className="flex-1 pl-3">
-                                        <span>Nhà giả kim</span>
-                                    </div>
-                                    <div className="w-[80px] pl-3">300.000₫</div>
-                                </li>
+                                {cartItems.length !== 0 &&
+                                    cartItems.map((cartItem) => (
+                                        <li key={cartItem.id} className="flex py-1.5">
+                                            <div className="relative h-[50px] w-[50px]">
+                                                <img
+                                                    src={cartItem.image || BookImage}
+                                                    alt={cartItem.name}
+                                                    className="inline-block h-full w-full overflow-hidden rounded-sm border border-solid object-cover"
+                                                />
+                                                <span className="absolute right-0 top-0 inline-flex h-5 w-5 -translate-y-2.5 translate-x-2.5 items-center justify-center rounded-full bg-[--main-color] text-white">
+                                                    {cartItem.quantity}
+                                                </span>
+                                            </div>
+                                            <div className="flex-1 pl-3">
+                                                <span>{cartItem.name}</span>
+                                            </div>
+                                            <div className="w-[80px] pl-3">
+                                                {utils.formatNumber(cartItem.price * cartItem.quantity)}₫
+                                            </div>
+                                        </li>
+                                    ))}
                             </ul>
                             <div className="border-b border-solid border-gray-300 py-3">
                                 <div className="flex items-center justify-between">
                                     <span>Tạm tính</span>
-                                    <span>300.000₫</span>
+                                    <span>{utils.formatNumber(getCartTotal())}₫</span>
                                 </div>
                                 <div className="mt-2 flex items-center justify-between">
                                     <span>Phí vận chuyển</span>
-                                    <span>40.000₫</span>
+                                    <span>{utils.formatNumber(shippingTax)}₫</span>
                                 </div>
                             </div>
                             <div className="py-3">
                                 <div className="mb-3 flex items-center justify-between text-xl font-bold">
                                     <span>Tổng cộng</span>
-                                    <span className="text-[--main-color]">340.000₫</span>
+                                    <span className="text-[--main-color]">
+                                        {utils.formatNumber(getCartTotal() + shippingTax)}₫
+                                    </span>
                                 </div>
                                 <div className="hidden items-center justify-between lg:flex">
-                                    <a
-                                        href="#"
+                                    <Link
+                                        to="/cart"
                                         className="inline-flex items-center text-[--main-color] hover:opacity-80"
                                     >
                                         <ArrowLeftIcon className="h-4 w-4" />
                                         <span className="ml-1">Quay về giỏ hàng</span>
-                                    </a>
-                                    <button className="rounded-md bg-[--main-color] px-6 py-3 text-white hover:opacity-80">
+                                    </Link>
+                                    <button
+                                        onClick={handleSubmit}
+                                        className="rounded-md bg-[--main-color] px-6 py-3 text-white hover:opacity-80"
+                                    >
                                         ĐẶT HÀNG
                                     </button>
                                 </div>
@@ -300,9 +387,9 @@ function Checkout() {
                     </div>
                 </div>
                 <header className="flex h-[77px] items-center justify-center border-b border-solid border-gray-300 lg:hidden">
-                    <a href="#">
+                    <Link to="/">
                         <img src={Logo} alt="logo" className="inline-block h-[40px] w-[40px]" />
-                    </a>
+                    </Link>
                 </header>
             </div>
         </div>
