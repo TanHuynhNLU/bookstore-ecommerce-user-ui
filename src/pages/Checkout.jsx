@@ -1,6 +1,8 @@
 import { ArrowLeftIcon, CurrencyDollarIcon, UserCircleIcon } from '@heroicons/react/24/outline';
 import Select from 'react-select';
 import { useContext, useEffect, useState } from 'react';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import Logo from '~/assets/imgs/logo.png';
 import { cities } from '~/data/AddressVn';
@@ -8,11 +10,13 @@ import BookImage from '~/assets/imgs/nha-gia-kim.jpg';
 import { Link } from 'react-router-dom';
 import { CartContext } from '~/context/CartContext';
 import * as utils from '~/utils/utils';
+import * as orderService from '~/services/OrderService';
+import { toast } from 'react-toastify';
 function Checkout() {
     const shippingTax = 40000;
     const [formData, setFormData] = useState({ email: '', fullName: '', phone: '', hamlet: '', note: '' });
     const [errors, setErrors] = useState([]);
-    const { cartItems, getCartTotal, removeFromCart, increaseQuantity, decreaseQuantity } = useContext(CartContext);
+    const { cartItems, getCartTotal, clearCart } = useContext(CartContext);
     const [city, setCity] = useState();
     const [cityOptions, setCityOptions] = useState([]);
     const [districtOptions, setDistrictOptions] = useState([]);
@@ -46,8 +50,43 @@ function Checkout() {
     const handleSubmit = (e) => {
         e.preventDefault();
         if (validate()) {
-            console.log('Form Data:', formData);
-            // Reset form or perform additional actions
+            const address = `${formData.hamlet}, ${ward.label}, ${district.label}, ${city.label}`;
+            const fetchAPI = async () => {
+                const res = await orderService.addNewOrder({
+                    name: formData.fullName,
+                    email: formData.email,
+                    phone: formData.phone,
+                    shippingAddress: address,
+                    note: formData.note,
+                    cartItems: cartItems,
+                });
+                if (res.status === 'CREATED') {
+                    toast.success('Đặt hàng thành công', {
+                        position: 'top-right',
+                        autoClose: 1000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        theme: 'light',
+                    });
+                    clearCart();
+                }
+            };
+            if (cartItems.length !== 0) fetchAPI();
+            else {
+                toast.info('Không có sản phẩm nào trong giỏ hàng', {
+                    position: 'top-right',
+                    autoClose: 1000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: 'light',
+                });
+            }
         }
     };
 
@@ -125,7 +164,6 @@ function Checkout() {
             setWard(null);
         }
     }, [district]);
-
     return (
         <div className="flex items-center justify-center">
             <div className="flex w-full max-w-[1330px] flex-col-reverse lg:flex-row">
@@ -392,6 +430,7 @@ function Checkout() {
                     </Link>
                 </header>
             </div>
+            <ToastContainer />
         </div>
     );
 }
