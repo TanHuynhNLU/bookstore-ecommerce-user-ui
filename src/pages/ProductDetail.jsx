@@ -31,7 +31,7 @@ import lgFullscreen from 'lightgallery/plugins/fullscreen';
 import lgShare from 'lightgallery/plugins/share';
 
 import BookImage from '~/assets/imgs/nha-gia-kim.jpg';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useContext, useEffect, useState } from 'react';
 import * as productService from '~/services/ProductService';
 import * as utils from '~/utils/utils';
@@ -39,6 +39,7 @@ import { CartContext } from '~/context/CartContext';
 import { toast } from 'react-toastify';
 
 function ProductDetail() {
+    const navigate = useNavigate();
     let { productId } = useParams();
     const [product, setProduct] = useState({});
     const [products, setProducts] = useState([]);
@@ -77,6 +78,11 @@ function ProductDetail() {
             progress: undefined,
             theme: 'light',
         });
+    };
+
+    const handleCheckout = () => {
+        addToCart({ ...product, quantity });
+        navigate('/checkout');
     };
 
     // Fetching product by id from API
@@ -179,7 +185,10 @@ function ProductDetail() {
                             >
                                 Thêm vào giỏ hàng
                             </button>
-                            <button className="mt-3 flex h-[65px] w-full items-center justify-center rounded-md border border-solid border-[--main-color] bg-[--main-color] px-3 py-[6px] text-xl font-bold text-white hover:bg-white hover:text-[--main-color] md:ml-3 md:mt-0 md:w-[224px]">
+                            <button
+                                onClick={() => handleCheckout()}
+                                className="mt-3 flex h-[65px] w-full items-center justify-center rounded-md border border-solid border-[--main-color] bg-[--main-color] px-3 py-[6px] text-xl font-bold text-white hover:bg-white hover:text-[--main-color] md:ml-3 md:mt-0 md:w-[224px]"
+                            >
                                 Mua ngay
                             </button>
                         </div>
@@ -247,7 +256,10 @@ function ProductDetail() {
                                             <button className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-md border border-solid border-[--main-color] bg-[#f5f5f5] text-[--main-color] hover:bg-[--main-color] hover:text-white">
                                                 <ShoppingCartIcon className="h-4 w-4" />
                                             </button>
-                                            <button className="ml-1 flex h-12 w-full flex-1 items-center justify-center rounded-md border border-solid border-[--main-color] bg-[--main-color] font-bold text-white hover:bg-[#f5f5f5] hover:text-[--main-color]">
+                                            <button
+                                                onClick={() => handleCheckout(book)}
+                                                className="ml-1 flex h-12 w-full flex-1 items-center justify-center rounded-md border border-solid border-[--main-color] bg-[--main-color] font-bold text-white hover:bg-[#f5f5f5] hover:text-[--main-color]"
+                                            >
                                                 Mua ngay
                                             </button>
                                         </div>
