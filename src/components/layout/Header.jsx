@@ -108,16 +108,18 @@ function Header() {
                             <span className="font-bold">Tài khoản</span>
                         </div>
                         <ul className="absolute left-0 top-full hidden min-w-[150px] rounded-md bg-white shadow-nav-popup before:absolute before:-top-3 before:left-8 before:block before:h-6 before:w-6 before:rotate-45 before:bg-white group-hover/account:inline-block">
-                            <li className="cursor-pointer px-4 py-2 hover:text-[--main-color]">
-                                <a className="h-full w-full" href="#">
-                                    Đăng nhập
-                                </a>
-                            </li>
-                            <li className="cursor-pointer px-4 py-2 hover:text-[--main-color]">
-                                <a className="h-full w-full" href="#">
-                                    Đăng ký
-                                </a>
-                            </li>
+                            <Link
+                                to="/account/login"
+                                className="block cursor-pointer px-4 py-2 hover:text-[--main-color]"
+                            >
+                                <span className="inline-block h-full w-full">Đăng nhập</span>
+                            </Link>
+                            <Link
+                                to="/account/register"
+                                className="block cursor-pointer px-4 py-2 hover:text-[--main-color]"
+                            >
+                                <span className="inline-block h-full w-full">Đăng ký</span>
+                            </Link>
                         </ul>
                     </div>
                     <div className="group/cart relative flex h-full items-center justify-center">

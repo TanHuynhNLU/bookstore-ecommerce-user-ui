@@ -2,8 +2,10 @@ import Cart from '~/pages/Cart';
 import Checkout from '~/pages/Checkout';
 import Contact from '~/pages/Contact';
 import Home from '~/pages/Home';
+import Login from '~/pages/Login';
 import ProductDetail from '~/pages/ProductDetail';
 import Products from '~/pages/Products';
+import Register from '~/pages/Register';
 
 export const routes = [
     { path: '/', component: Home },
@@ -11,5 +13,7 @@ export const routes = [
     { path: '/product-detail/:productId', component: ProductDetail },
     { path: '/contact', component: Contact },
     { path: '/cart', component: Cart },
+    { path: '/account/login', component: Login },
+    { path: '/account/register', component: Register },
     { path: '/checkout', component: Checkout, layout: null },
 ];
