@@ -1,7 +1,46 @@
 import { ChevronRightIcon } from '@heroicons/react/24/outline';
-import { Link } from 'react-router-dom';
+import { useContext, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { UserContext } from '~/context/UserContext';
+
+import * as authService from '~/services/AuthenService';
 
 function Login() {
+    const { handleLogin } = useContext(UserContext);
+    const navigate = useNavigate();
+    const [formData, setFormData] = useState({
+        username: '',
+        password: '',
+    });
+
+    const handleOnChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({ ...formData, [name]: value });
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        const fetchAPI = async () => {
+            const res = await authService.login(formData.username, formData.password);
+            if (res.status === 'OK') {
+                handleLogin(res.data.user);
+                navigate('/');
+            } else {
+                toast.error(res.message, {
+                    position: 'top-right',
+                    autoClose: 1000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: 'light',
+                });
+            }
+        };
+        fetchAPI();
+    };
     return (
         <div>
             <div className="flex items-center justify-center bg-banner">
@@ -21,7 +60,7 @@ function Login() {
                 <div className="my-[30px] flex w-full max-w-[840px] flex-col-reverse border border-solid border-[--main-color] md:flex-row ">
                     <div className="flex-1 p-[30px]">
                         <h5 className="mb-2 text-xl font-bold text-[--main-color]">Đăng nhập tài khoản</h5>
-                        <form action="aa">
+                        <form onSubmit={handleSubmit}>
                             <div className="mb-4 flex flex-col">
                                 <label htmlFor="username" className="mb-2 font-semibold">
                                     Tài khoản <span className=" text-red-500">*</span>
@@ -33,6 +72,7 @@ function Login() {
                                     className="rounded-md border border-gray-300 px-4 py-2 outline-none"
                                     placeholder="Tài khoản"
                                     required
+                                    onChange={handleOnChange}
                                 />
                             </div>
                             <div className="mb-4 flex flex-col">
@@ -46,6 +86,7 @@ function Login() {
                                     className="rounded-md border border-gray-300 px-4 py-2 outline-none"
                                     placeholder="Mật khẩu"
                                     required
+                                    onChange={handleOnChange}
                                 />
                             </div>
                             <button className="h-[40px] w-full rounded-md bg-[--main-color] font-bold uppercase text-white">
