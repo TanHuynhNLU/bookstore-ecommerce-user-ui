@@ -13,8 +13,10 @@ import ProductImage from '~/assets/imgs/nha-gia-kim.jpg';
 import Logo from '~/assets/imgs/logo.png';
 import { CartContext } from '~/context/CartContext';
 import * as utils from '~/utils/utils';
+import { UserContext } from '~/context/UserContext';
 
 function Header() {
+    const { currUser, handleLogout } = useContext(UserContext);
     const [showMobileMenu, setShowMobileMenu] = useState(false);
     const { cartItems, getCartTotal } = useContext(CartContext);
 

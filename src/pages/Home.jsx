@@ -13,11 +13,12 @@ import Banner4 from '~/assets/imgs/banner4.jpg';
 import * as productService from '~/services/ProductService';
 import * as utils from '~/utils/utils';
 import { useContext, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { CartContext } from '~/context/CartContext';
 import { toast } from 'react-toastify';
 
 function Home() {
+    const navigate = useNavigate();
     const { addToCart } = useContext(CartContext);
     const [bestSellers, setBestSellers] = useState([]);
     const [newBooks, setNewBooks] = useState([]);
@@ -34,6 +35,11 @@ function Home() {
             progress: undefined,
             theme: 'light',
         });
+    };
+
+    const handleCheckout = (product) => {
+        addToCart({ ...product, quantity: 1 });
+        navigate('/checkout');
     };
 
     // Fetching best sellers and new books from API
@@ -192,7 +198,10 @@ function Home() {
                                                 >
                                                     <ShoppingCartIcon className="h-4 w-4" />
                                                 </button>
-                                                <button className="ml-1 flex h-12 w-full flex-1 items-center justify-center rounded-md border border-solid border-[--main-color] bg-[--main-color] font-bold text-white hover:bg-[#f5f5f5] hover:text-[--main-color]">
+                                                <button
+                                                    onClick={() => handleCheckout(book)}
+                                                    className="ml-1 flex h-12 w-full flex-1 items-center justify-center rounded-md border border-solid border-[--main-color] bg-[--main-color] font-bold text-white hover:bg-[#f5f5f5] hover:text-[--main-color]"
+                                                >
                                                     Mua ngay
                                                 </button>
                                             </div>
@@ -251,7 +260,10 @@ function Home() {
                                                 >
                                                     <ShoppingCartIcon className="h-4 w-4" />
                                                 </button>
-                                                <button className="ml-1 flex h-12 w-full flex-1 items-center justify-center rounded-md border border-solid border-[--main-color] bg-[--main-color] font-bold text-white hover:bg-[#f5f5f5] hover:text-[--main-color]">
+                                                <button
+                                                    onClick={() => handleCheckout(book)}
+                                                    className="ml-1 flex h-12 w-full flex-1 items-center justify-center rounded-md border border-solid border-[--main-color] bg-[--main-color] font-bold text-white hover:bg-[#f5f5f5] hover:text-[--main-color]"
+                                                >
                                                     Mua ngay
                                                 </button>
                                             </div>

@@ -2,6 +2,7 @@ import Cart from '~/pages/Cart';
 import Checkout from '~/pages/Checkout';
 import Contact from '~/pages/Contact';
 import Home from '~/pages/Home';
+import Login from '~/pages/Login';
 import ProductDetail from '~/pages/ProductDetail';
 import Products from '~/pages/Products';
 import Profile from '~/pages/Profile';

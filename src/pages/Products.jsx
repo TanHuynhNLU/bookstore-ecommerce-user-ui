@@ -1,7 +1,7 @@
 import { ChevronRightIcon, ShoppingCartIcon, Square3Stack3DIcon } from '@heroicons/react/24/outline';
 import { useContext, useEffect, useState } from 'react';
 import ReactPaginate from 'react-paginate';
-import { Link, NavLink, useParams } from 'react-router-dom';
+import { Link, NavLink, useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 import BookImage from '~/assets/imgs/nha-gia-kim.jpg';
@@ -10,6 +10,7 @@ import * as productService from '~/services/ProductService';
 import * as utils from '~/utils/utils';
 
 function Products() {
+    const navigate = useNavigate();
     const { addToCart } = useContext(CartContext);
     let { genre } = useParams();
 
@@ -77,6 +78,11 @@ function Products() {
             progress: undefined,
             theme: 'light',
         });
+    };
+
+    const handleCheckout = (product) => {
+        addToCart({ ...product, quantity: 1 });
+        navigate('/checkout');
     };
 
     useEffect(() => {
@@ -437,7 +443,10 @@ function Products() {
                                             >
                                                 <ShoppingCartIcon className="h-4 w-4" />
                                             </button>
-                                            <button className="ml-1 flex h-12 w-full flex-1 items-center justify-center rounded-md border border-solid border-[--main-color] bg-[--main-color] font-bold text-white hover:bg-[#f5f5f5] hover:text-[--main-color]">
+                                            <button
+                                                onClick={() => handleCheckout(book)}
+                                                className="ml-1 flex h-12 w-full flex-1 items-center justify-center rounded-md border border-solid border-[--main-color] bg-[--main-color] font-bold text-white hover:bg-[#f5f5f5] hover:text-[--main-color]"
+                                            >
                                                 Mua ngay
                                             </button>
                                         </div>
