@@ -3,6 +3,7 @@ import Checkout from '~/pages/Checkout';
 import Contact from '~/pages/Contact';
 import Home from '~/pages/Home';
 import Login from '~/pages/Login';
+import Orders from '~/pages/Orders';
 import ProductDetail from '~/pages/ProductDetail';
 import Products from '~/pages/Products';
 import Profile from '~/pages/Profile';
@@ -17,5 +18,6 @@ export const routes = [
     { path: '/account/login', component: Login },
     { path: '/account/register', component: Register },
     { path: '/account/profile', component: Profile },
+    { path: '/account/orders', component: Orders },
     { path: '/checkout', component: Checkout, layout: null },
 ];

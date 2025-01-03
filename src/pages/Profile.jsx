@@ -2,6 +2,7 @@ import { ChevronRightIcon } from '@heroicons/react/24/outline';
 import { useContext, useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import AccountSidebar from '~/components/AccountSidebar';
 
 import { UserContext } from '~/context/UserContext';
 import * as userService from '~/services/UserService';
@@ -53,51 +54,7 @@ function Profile() {
             <div className="flex items-center justify-center">
                 <div className="my-3 flex w-full max-w-7xl flex-col px-2 md:flex-row md:items-start md:space-x-2">
                     <div className="mb-8 w-full p-2 shadow-md md:mb-0 md:w-1/4">
-                        <div className="py-2">
-                            <h5 className="font-bold">TRANG TÀI KHOẢN</h5>
-                            <ul>
-                                <NavLink
-                                    to="/account/profile"
-                                    className="block cursor-pointer py-1 hover:text-[--main-color]"
-                                    style={({ isActive }) => ({
-                                        color: isActive ? 'var(--main-color)' : 'black',
-                                        fontWeight: isActive ? 'bold' : 'normal',
-                                    })}
-                                >
-                                    <span>Thông tin tài khoản</span>
-                                </NavLink>
-                                <NavLink
-                                    to="/account/orders"
-                                    className="block cursor-pointer py-1 hover:text-[--main-color]"
-                                    style={({ isActive }) => ({
-                                        color: isActive ? 'var(--main-color)' : 'black',
-                                        fontWeight: isActive ? 'bold' : 'normal',
-                                    })}
-                                >
-                                    <span>Đơn hàng của bạn</span>
-                                </NavLink>
-                                <NavLink
-                                    to="/account/change-password"
-                                    className="block cursor-pointer py-1 hover:text-[--main-color]"
-                                    style={({ isActive }) => ({
-                                        color: isActive ? 'var(--main-color)' : 'black',
-                                        fontWeight: isActive ? 'bold' : 'normal',
-                                    })}
-                                >
-                                    <span>Đổi mật khẩu</span>
-                                </NavLink>
-                                <NavLink
-                                    to="/account/logout"
-                                    className="block cursor-pointer py-1 hover:text-[--main-color]"
-                                    style={({ isActive }) => ({
-                                        color: isActive ? 'var(--main-color)' : 'black',
-                                        fontWeight: isActive ? 'bold' : 'normal',
-                                    })}
-                                >
-                                    <span>Đăng xuất</span>
-                                </NavLink>
-                            </ul>
-                        </div>
+                        <AccountSidebar />
                     </div>
                     <div className="w-full px-4 md:w-3/4">
                         <h5 className="text-xl font-semibold">THÔNG TIN TÀI KHOẢN</h5>
