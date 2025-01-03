@@ -1,5 +1,18 @@
 import * as request from '~/utils/request';
 
+export const getOrderByEmail = async (email) => {
+    try {
+        const res = request.get('/orders/filter', {
+            params: {
+                email,
+            },
+        });
+        return res;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
 export const addNewOrder = async ({
     name,
     email = '',

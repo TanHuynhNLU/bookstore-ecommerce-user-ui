@@ -112,7 +112,7 @@ function Header() {
                         {currUser ? (
                             <ul className="absolute left-0 top-full hidden min-w-[150px] rounded-md bg-white shadow-nav-popup before:absolute before:-top-3 before:left-8 before:block before:h-6 before:w-6 before:rotate-45 before:bg-white group-hover/account:inline-block">
                                 <Link
-                                    to="/profile"
+                                    to="/account/profile"
                                     className="block cursor-pointer px-4 py-2 hover:text-[--main-color]"
                                 >
                                     <span className="inline-block h-full w-full">Tài khoản</span>
