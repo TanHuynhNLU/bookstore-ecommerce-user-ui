@@ -13,6 +13,7 @@ function UserProvider({ children }) {
     const handleLogout = () => {
         setUser('');
         localStorage.removeItem('user');
+        localStorage.removeItem('cartItems');
     };
 
     return (

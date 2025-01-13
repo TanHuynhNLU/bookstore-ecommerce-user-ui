@@ -1,4 +1,5 @@
 import Cart from '~/pages/Cart';
+import ChangePassword from '~/pages/ChangePassword';
 import Checkout from '~/pages/Checkout';
 import Contact from '~/pages/Contact';
 import Home from '~/pages/Home';
@@ -19,5 +20,6 @@ export const routes = [
     { path: '/account/register', component: Register },
     { path: '/account/profile', component: Profile },
     { path: '/account/orders', component: Orders },
+    { path: '/account/change-password', component: ChangePassword },
     { path: '/checkout', component: Checkout, layout: null },
 ];

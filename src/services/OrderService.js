@@ -2,7 +2,7 @@ import * as request from '~/utils/request';
 
 export const getOrderByEmail = async (email) => {
     try {
-        const res = request.get('/orders/filter', {
+        const res = await request.get('/orders/filter', {
             params: {
                 email,
             },
@@ -25,7 +25,7 @@ export const addNewOrder = async ({
     cartItems = [],
 }) => {
     try {
-        const res = request.post('/orders', {
+        const res = await request.post('/orders', {
             customer: {
                 name,
                 email,

@@ -2,7 +2,7 @@ import * as request from '~/utils/request';
 
 export const getAllBooks = async () => {
     try {
-        const res = request.get('/books');
+        const res = await request.get('/books');
         return res;
     } catch (error) {
         console.log(error);
@@ -39,7 +39,7 @@ export const getBooksByFilter = async ({
 
 export const getBooksPagAndSort = async ({ page = 0, size = 10, sort = 'id' }) => {
     try {
-        const res = request.get('/books/pagination', {
+        const res = await request.get('/books/pagination', {
             params: {
                 page,
                 size,
@@ -53,7 +53,7 @@ export const getBooksPagAndSort = async ({ page = 0, size = 10, sort = 'id' }) =
 };
 export const getBook = async (id) => {
     try {
-        const res = request.get(`/books/${id}`);
+        const res = await request.get(`/books/${id}`);
         return res;
     } catch (error) {
         console.log(error);

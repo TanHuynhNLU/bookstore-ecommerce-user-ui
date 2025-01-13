@@ -56,11 +56,10 @@ function Orders() {
                                         </th>
                                     </tr>
                                 </thead>
-                                {orders.length === 0 && <p>Không có đơn hàng.</p>}
-                                {orders.length !== 0 &&
-                                    orders.map((order) => (
-                                        <tbody>
-                                            <tr className="text-left">
+                                <tbody>
+                                    {orders.length !== 0 ? (
+                                        orders.map((order) => (
+                                            <tr key={order.id} className="text-left">
                                                 <td className="border border-solid border-gray-400 p-1">{order.id}</td>
                                                 <td className="border border-solid border-gray-400 p-1">
                                                     {moment(order.dateCreatedOrdinal).format('DD-MM-YYYY')}
@@ -75,8 +74,13 @@ function Orders() {
                                                     {utils.formatNumber(order.totalPrice)}
                                                 </td>
                                             </tr>
-                                        </tbody>
-                                    ))}
+                                        ))
+                                    ) : (
+                                        <tr>
+                                            <td>Không có đơn hàng.</td>
+                                        </tr>
+                                    )}
+                                </tbody>
                             </table>
                         </div>
                     </div>

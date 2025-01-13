@@ -1,6 +1,15 @@
-import { NavLink } from 'react-router-dom';
+import { useContext } from 'react';
+import { NavLink, useNavigate } from 'react-router-dom';
+import { UserContext } from '~/context/UserContext';
 
 function AccountSidebar() {
+    const { handleLogout } = useContext(UserContext);
+    const navigate = useNavigate();
+
+    const handleLogoutClicked = () => {
+        handleLogout();
+        navigate('/');
+    };
     return (
         <div className="py-2">
             <h5 className="font-bold">TRANG TÀI KHOẢN</h5>
@@ -35,16 +44,9 @@ function AccountSidebar() {
                 >
                     <span>Đổi mật khẩu</span>
                 </NavLink>
-                <NavLink
-                    to="/account/logout"
-                    className="block cursor-pointer py-1 hover:text-[--main-color]"
-                    style={({ isActive }) => ({
-                        color: isActive ? 'var(--main-color)' : 'black',
-                        fontWeight: isActive ? 'bold' : 'normal',
-                    })}
-                >
+                <li className="block cursor-pointer py-1 hover:text-[--main-color]" onClick={handleLogoutClicked}>
                     <span>Đăng xuất</span>
-                </NavLink>
+                </li>
             </ul>
         </div>
     );
