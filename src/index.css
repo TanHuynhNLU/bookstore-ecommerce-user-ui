@@ -23,3 +23,7 @@
     color: var(--main-color);
     transform: translateY(-40px);
 }
+
+body .mySwiper .swiper-button-disabled {
+    pointer-events: initial;
+}

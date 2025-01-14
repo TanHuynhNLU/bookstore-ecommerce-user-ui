@@ -431,6 +431,7 @@ function Products() {
                                     <div className="group/product-image relative inline-block overflow-hidden">
                                         <Link to={`/product-detail/${book.id}`}>
                                             <img
+                                                loading="lazy"
                                                 src={book.image || BookImage}
                                                 alt={book.name}
                                                 className="inline-block w-full scale-100 transform object-cover transition-transform duration-200 ease-in-out group-hover/product-image:scale-110"
@@ -452,10 +453,16 @@ function Products() {
                                         </div>
                                     </div>
                                     <div className="flex max-w-[160px] flex-col p-2">
-                                        <Link to={`/product-detail/${book.id}`} className="inline-block">
+                                        <Link
+                                            to={`/product-detail/${book.id}`}
+                                            className="group/book-name relative inline-block"
+                                        >
                                             <h3 className="line-clamp-2 text-center font-bold uppercase">
                                                 {book.name}
                                             </h3>
+                                            <span className="absolute bottom-full left-0 z-[2] hidden bg-white p-1 shadow-md group-hover/book-name:block">
+                                                {book.name}
+                                            </span>
                                         </Link>
                                         <span className="text-center font-bold text-[--main-color]">
                                             {utils.formatNumber(book.price)}đ

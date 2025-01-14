@@ -63,11 +63,12 @@ function Home() {
                                 delay: 2500,
                                 disableOnInteraction: false,
                             }}
+                            lazyPreloadPrevNext={2}
                             modules={[Autoplay]}
                         >
                             <SwiperSlide>
                                 <div className="flex flex-col overflow-hidden rounded-md bg-white shadow-sm">
-                                    <img className="inline-block w-full" src={Banner1} alt="banner" />
+                                    <img loading="lazy" className="inline-block w-full" src={Banner1} alt="banner" />
                                     <div className="px-4 py-3">
                                         <h3 className="mb-2 text-xl font-semibold text-[--main-color]">
                                             Toạ đàm: Lối vào thế giới văn chương của Italo Calvino
@@ -78,7 +79,7 @@ function Home() {
                             </SwiperSlide>
                             <SwiperSlide>
                                 <div className="flex flex-col overflow-hidden rounded-md bg-white shadow-sm">
-                                    <img className="inline-block w-full" src={Banner2} alt="banner" />
+                                    <img loading="lazy" className="inline-block w-full" src={Banner2} alt="banner" />
                                     <div className="px-4 py-3">
                                         <h3 className="mb-2 text-xl font-semibold text-[--main-color]">
                                             SÁCH MỚI NỔI BẬT THÁNG 8
@@ -89,7 +90,7 @@ function Home() {
                             </SwiperSlide>
                             <SwiperSlide>
                                 <div className="flex flex-col overflow-hidden rounded-md bg-white shadow-sm">
-                                    <img className="inline-block w-full" src={Banner3} alt="banner" />
+                                    <img loading="lazy" className="inline-block w-full" src={Banner3} alt="banner" />
                                     <div className="px-4 py-3">
                                         <h3 className="mb-2 text-xl font-semibold text-[--main-color]">
                                             Toạ đàm: Ngủ ngon mỗi đêm, sống khoẻ mỗi ngày cùng ThS.BS CK2 Phạm Quỳnh Nga
@@ -105,6 +106,7 @@ function Home() {
                             <div className="w-full border-solid border-[#bbbbbf] py-2 md:w-1/2 md:border-b md:px-2 md:py-6 xl:w-full xl:px-0 xl:first:pt-0 xl:last:pb-0">
                                 <div className="flex w-full overflow-hidden rounded-md bg-white shadow-sm">
                                     <img
+                                        loading="lazy"
                                         className="inline-block h-[65px] w-[102px] object-cover min-[400px]:h-[125px] min-[400px]:w-[196px]"
                                         src={Banner4}
                                         alt="banner"
@@ -120,6 +122,7 @@ function Home() {
                             <div className="w-full border-solid border-[#bbbbbf] py-2 md:w-1/2 md:border-b md:px-2 md:py-6 xl:w-full xl:px-0 xl:first:pt-0 xl:last:pb-0">
                                 <div className="flex w-full overflow-hidden rounded-md bg-white shadow-sm">
                                     <img
+                                        loading="lazy"
                                         className="inline-block h-[65px] w-[102px] object-cover min-[400px]:h-[125px] min-[400px]:w-[196px]"
                                         src={Banner4}
                                         alt="banner"
@@ -135,6 +138,7 @@ function Home() {
                             <div className="w-full border-solid border-[#bbbbbf] py-2 md:w-1/2 md:border-b md:border-none md:px-2 md:py-6 xl:w-full xl:px-0 xl:first:pt-0 xl:last:pb-0">
                                 <div className="flex w-full overflow-hidden rounded-md bg-white shadow-sm">
                                     <img
+                                        loading="lazy"
                                         className="inline-block h-[65px] w-[102px] object-cover min-[400px]:h-[125px] min-[400px]:w-[196px]"
                                         src={Banner4}
                                         alt="banner"
@@ -150,6 +154,7 @@ function Home() {
                             <div className="w-full border-solid border-[#bbbbbf] py-2 md:w-1/2 md:border-b md:border-none md:px-2 md:py-6 xl:w-full xl:px-0 xl:first:pt-0 xl:last:pb-0">
                                 <div className="flex w-full overflow-hidden rounded-md bg-white shadow-sm">
                                     <img
+                                        loading="lazy"
                                         className="inline-block h-[65px] w-[102px] object-cover min-[400px]:h-[125px] min-[400px]:w-[196px]"
                                         src={Banner4}
                                         alt="banner"
@@ -179,7 +184,13 @@ function Home() {
                             Xem thêm <ArrowRightCircleIcon className="inline-block h-8 w-8" />
                         </Link>
                     </div>
-                    <Swiper slidesPerView={'auto'} navigation={true} modules={[Navigation]} className="mySwiper">
+                    <Swiper
+                        slidesPerView={'auto'}
+                        navigation={true}
+                        lazyPreloadPrevNext={2}
+                        modules={[Navigation]}
+                        className="mySwiper"
+                    >
                         {bestSellers.length !== 0 &&
                             bestSellers.map((book, index) => (
                                 <SwiperSlide
@@ -189,7 +200,12 @@ function Home() {
                                     <div className="z-[1] inline-flex flex-col items-center">
                                         <div className="group/product-image relative inline-block overflow-hidden">
                                             <Link to={`/product-detail/${book.id}`}>
-                                                <img src={book.image} alt={book.name} className="inline-block w-full" />
+                                                <img
+                                                    loading="lazy"
+                                                    src={book.image}
+                                                    alt={book.name}
+                                                    className="inline-block w-full"
+                                                />
                                             </Link>
                                             <div className="absolute bottom-[-100%] flex w-full px-8 transition-all duration-200 group-hover/product-image:bottom-0">
                                                 <button
@@ -241,7 +257,13 @@ function Home() {
                             Xem thêm <ArrowRightCircleIcon className="inline-block h-8 w-8" />
                         </Link>
                     </div>
-                    <Swiper slidesPerView={'auto'} navigation={true} modules={[Navigation]} className="mySwiper">
+                    <Swiper
+                        slidesPerView={'auto'}
+                        navigation={true}
+                        lazyPreloadPrevNext={2}
+                        modules={[Navigation]}
+                        className="mySwiper"
+                    >
                         {newBooks.length !== 0 &&
                             newBooks.map((book, index) => (
                                 <SwiperSlide
@@ -251,7 +273,12 @@ function Home() {
                                     <div className="z-[1] inline-flex flex-col items-center">
                                         <div className="group/product-image relative inline-block overflow-hidden">
                                             <Link to={`/product-detail/${book.id}`}>
-                                                <img src={book.image} alt={book.name} className="inline-block w-full" />
+                                                <img
+                                                    loading="lazy"
+                                                    src={book.image}
+                                                    alt={book.name}
+                                                    className="inline-block w-full"
+                                                />
                                             </Link>
                                             <div className="absolute bottom-[-100%] flex w-full px-8 transition-all duration-200 group-hover/product-image:bottom-0">
                                                 <button
