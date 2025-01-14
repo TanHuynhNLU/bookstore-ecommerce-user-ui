@@ -1,16 +1,50 @@
 /* eslint-disable jsx-a11y/iframe-has-title */
 import { ChevronRightIcon } from '@heroicons/react/24/outline';
 import { MapPinIcon, PhoneIcon, QuestionMarkCircleIcon } from '@heroicons/react/24/solid';
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
+
+import * as contactService from '~/services/ContactService';
 
 function Contact() {
+    const [formData, setFormData] = useState({
+        name: '',
+        email: '',
+        content: '',
+    });
+
+    const handleOnChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({ ...formData, [name]: value });
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        const fetchAPI = async () => {
+            const res = await contactService.addContact({ ...formData });
+            if (res.status === 'CREATED')
+                toast.success('Gửi liên hệ thành công', {
+                    position: 'top-right',
+                    autoClose: 1000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: 'light',
+                });
+        };
+        fetchAPI();
+    };
     return (
         <div>
             <div className="flex items-center justify-center bg-banner">
                 <div className="w-full max-w-7xl px-2 py-3">
                     <ul className="flex">
-                        <li className="hover:text-[--main-color]">
-                            <a href="#">Trang chủ</a>
-                        </li>
+                        <Link to="/" className="block hover:text-[--main-color]">
+                            <span>Trang chủ</span>
+                        </Link>
                         <li className="ml-1 text-[--main-color]">
                             <ChevronRightIcon className="inline-block h-4 w-4" />
                             <span className="ml-1 font-bold">Liên hệ</span>
@@ -68,16 +102,19 @@ function Contact() {
                                 </div>
                             </div>
                             <div className="flex">
-                                <form className="flex w-full flex-col lg:flex-row" action="">
+                                <form className="flex w-full flex-col lg:flex-row" onSubmit={handleSubmit}>
                                     <div className="flex w-full flex-col lg:w-1/3">
                                         <div className="flex flex-col p-2">
-                                            <label className="mb-2 font-bold text-[--text-color]" htmlFor="fullName">
+                                            <label className="mb-2 font-bold text-[--text-color]" htmlFor="name">
                                                 Họ và tên <span className="text-red-500">*</span>
                                             </label>
                                             <input
-                                                id="fullName"
+                                                id="name"
+                                                name="name"
                                                 className="h-10 rounded-md bg-[#f7f7f7] px-3 text-[--text-color] outline-none"
                                                 type="text"
+                                                onChange={handleOnChange}
+                                                required
                                             />
                                         </div>
                                         <div className="flex flex-col p-2">
@@ -86,24 +123,33 @@ function Contact() {
                                             </label>
                                             <input
                                                 id="email"
+                                                name="email"
                                                 className="h-10 rounded-md bg-[#f7f7f7] px-3 text-[--text-color] outline-none"
                                                 type="text"
+                                                onChange={handleOnChange}
+                                                required
                                             />
                                         </div>
                                     </div>
                                     <div className="flex h-full w-full flex-col lg:w-2/3">
                                         <div className="flex h-full flex-col p-2">
-                                            <label className="mb-2 font-bold text-[--text-color]" htmlFor="fullName">
+                                            <label className="mb-2 font-bold text-[--text-color]" htmlFor="content">
                                                 Nội dung <span className="text-red-500">*</span>
                                             </label>
                                             <textarea
-                                                id="fullName"
+                                                id="content"
+                                                name="content"
                                                 className="h-[128px] rounded-md bg-[#f7f7f7] p-3 text-[--text-color] outline-none"
                                                 type="text"
+                                                onChange={handleOnChange}
+                                                required
                                             />
                                         </div>
                                         <div className="p-2">
-                                            <button className="flex h-10 items-center justify-center rounded-md border border-solid border-[--main-color] bg-[--main-color] px-4 py-2 font-bold text-white hover:bg-[#f5f5f5] hover:text-[--main-color]">
+                                            <button
+                                                type="submit"
+                                                className="flex h-10 items-center justify-center rounded-md border border-solid border-[--main-color] bg-[--main-color] px-4 py-2 font-bold text-white hover:bg-[#f5f5f5] hover:text-[--main-color]"
+                                            >
                                                 Gửi liên hệ
                                             </button>
                                         </div>
